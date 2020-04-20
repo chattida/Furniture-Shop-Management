@@ -28,7 +28,7 @@ def my_login(request):
         else:
             context['username'] = username
             context['password'] = password
-            context['error'] = 'Wrong username or password!'
+            context['error'] = 'บัญชีผู้ใช้ หรือ รหัสผ่านผิด!'
 
     # Get url path
     next_url = request.GET.get('next')
