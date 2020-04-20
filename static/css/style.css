@@ -1,3 +1,33 @@
-.orange {
-    color: #ff571c;
+body {
+    font-family: 'Sarabun', sans-serif !important;
+}
+
+.text-orange {
+    color: #ff571c !important;
+}
+
+.btn-outline-orange {
+    color: #f1f1f1 !important;
+    border-color: #ff571c !important;
+}
+
+.btn-outline-orange:hover {
+    color: #f1f1f1 !important;
+    background: #ff571c !important;
+    border-color: #ff571c !important;
+}
+
+.hr-orange {
+    height: 1px !important;
+    background-color: #ff571c !important;
+    border: none !important;
+}
+
+.border-orange {
+    /* border: 1px solid #ff9c78 !important; */
+    transition: 0.1s;
+}
+
+.border-orange:hover {
+    border: 1px solid #ff571c !important;
 }
