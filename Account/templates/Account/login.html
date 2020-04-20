@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+    <form method="POST" class="w-100" action="{% url 'login' %}">
+        {% csrf_token %}
+        <h1 class="text-center my-4 text-dark">FSM</h1>
+        <div class="form-group text-dark">
+            <label for="username">Username</label>
+            <input type="text" class="form-control w-100 border rounded bg-light" value="{{username}}" name='username' required>
+        </div>
+        <div class="form-group text-dark mt-2">
+            <label for="password">Password</label>
+            <input type="password" class="form-control w-100 border rounded bg-light" value="{{password}}" name='password' required>
+        </div>
+        {% if error %}
+          <p class="text-danger">{{error}}</p>
+        {% endif %}
+        <input type="hidden" name="next_url" value="{{ next_url }}">
+        <input type="submit" value="Log In" class="btn btn-dark mt-2 w-100">
+    </form>
+{% endblock %}
