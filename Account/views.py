@@ -1,10 +1,11 @@
 from django.shortcuts import redirect, render
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from .models import Account, Owner, Employee
 
 def my_login(request):
+    logout(request)
     context = {}
 
     # Get detail in form
@@ -38,6 +39,7 @@ def my_login(request):
     return render(request, template_name='Account/login.html', context=context)
 
 @login_required(login_url='login')
+@permission_required('Account.add_employee', login_url='login')
 def register(request):
     context = {}
     # Get detail in form
@@ -82,6 +84,13 @@ def register(request):
         )
         account.save()
 
+        context2 = {
+            'fname': first_name,
+            'lname': last_name,
+            'email': email,
+            'username': username
+        }
+
         if acc_type != 'owner':
             employee = Employee(
                 user=User.objects.get(username=username),
@@ -90,17 +99,24 @@ def register(request):
             )
             if acc_type == 'po':
                 employee.employee_type = 'PO'
+                user.groups.add(Group.objects.get(name='Purchasing_Officer'))
+                context2['type'] = 'Purchasing Officer'
             elif acc_type == 'so':
                 employee.employee_type = 'SO'
+                user.groups.add(Group.objects.get(name='Sale_Officer'))
+                context2['type'] = 'Sale Officer'
             employee.save()
+
         else:
             owner = Owner(
                 user=User.objects.get(username=username),
                 shop_name=request.POST.get('shop_name')
             )
             owner.save()
+            user.groups.add(Group.objects.get(name='Owner'))
+            context2['type'] = 'Owner'
 
-        return redirect('index')
+        return render(request, template_name='Main/index.html', context=context2)
 
     return render(request, template_name='Account/register.html', context=context)
 
