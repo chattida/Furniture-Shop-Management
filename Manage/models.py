@@ -26,7 +26,7 @@ class Item(models.Model):
 
 class Stock(models.Model):
     color = models.CharField(max_length=255)
-    amount = models.IntegerField(max_length=10)
+    amount = models.IntegerField()
     item_id = models.ForeignKey(Item, on_delete=models.CASCADE)
 
 class Order(models.Model):
@@ -36,7 +36,7 @@ class Order(models.Model):
     cus_id = models.ForeignKey(Customer, on_delete=models.CASCADE)
 
 class Order_Item(models.Model):
-    amount = models.IntegerField(max_length=10)
+    amount = models.IntegerField()
     color = models.CharField(max_length=255)
     price = models.DecimalField(max_digits=8, decimal_places=2)
     order_id = models.ForeignKey(Order, on_delete=models.CASCADE)
