@@ -28,9 +28,18 @@
         <h5 class="d-inline mx-2">FSM</h5>
       </a>
       <div class="navbar-nav ml-auto">
+        {% if user.is_authenticated %}
+        <p class="text-white my-auto mr-3">
+          <i class="fas fa-user"></i> : {{ user.get_username }}
+        </p>
+        <a class="btn btn-outline-orange" href="{% url 'logout' %}"
+          ><i class="fas fa-sign-out-alt"></i> ออกจากระบบ</a
+        >
+        {% else %}
         <a class="btn btn-outline-orange" href="{% url 'login' %}"
           ><i class="fas fa-sign-in-alt"></i> เข้าสู่ระบบ</a
         >
+        {% endif %}
       </div>
     </nav>
     <!-- container -->
