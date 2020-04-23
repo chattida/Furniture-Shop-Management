@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, permission_required
 from .models import Account, Owner, Employee
 
+
 def my_login(request):
     logout(request)
     context = {}
@@ -38,7 +39,8 @@ def my_login(request):
 
     return render(request, template_name='Account/login.html', context=context)
 
-@login_required(login_url='login')
+
+@login_required
 @permission_required('Account.add_employee', login_url='login')
 def register(request):
     context = {}
@@ -121,13 +123,13 @@ def register(request):
     return render(request, template_name='Account/register.html', context=context)
 
 
-@login_required(login_url='login')
+@login_required
 def my_logout(request):
     logout(request)
     return redirect('login')
 
 
-@login_required(login_url='login')
+@login_required
 def change_password(request):
     user = request.user
     context = {}

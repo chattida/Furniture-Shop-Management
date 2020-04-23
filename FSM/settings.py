@@ -86,8 +86,8 @@ DATABASES = {
         'PASSWORD': '1234',
         'HOST': 'localhost',
         'PORT': '5432',
-            }
-        }
+    }
+}
 
 
 # Password validation
@@ -131,3 +131,6 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static")
 ]
+
+# If not login redirect to this page
+LOGIN_URL = '/login/'
