@@ -41,7 +41,9 @@ INSTALLED_APPS = [
     'Main',
     'Manage',
     'View',
-    'Create'
+    'Create',
+    'API',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
