@@ -117,7 +117,7 @@ def register(request):
         email = request.POST.get('email')
         username = request.POST.get('username')
         password = request.POST.get('password')
-        password = request.POST.get('password2')
+        password2 = request.POST.get('password2')
         phone = request.POST.get('phone')
         acc_type = request.POST.get('type')
 
