@@ -9,7 +9,6 @@ def my_login(request):
     context = {}
 
     if Owner.objects.all().count() == 0:
-        print('Gooooooooooo')
         return redirect('start')
 
     # Check already login
@@ -49,6 +48,10 @@ def my_login(request):
 
 def let_start(request):
     context = {}
+
+    if Owner.objects.all().count() > 0:
+        return redirect('login')
+
     # Get detail in form
     if (request.method == 'POST'):
         first_name = request.POST.get('fname')
