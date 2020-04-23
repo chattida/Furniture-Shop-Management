@@ -85,13 +85,6 @@ def let_start(request):
         )
         account.save()
 
-        sendContext = {
-            'fname': first_name,
-            'lname': last_name,
-            'email': email,
-            'username': username
-        }
-
         try:
             Group.objects.get(name='Owner')
         except:
@@ -105,11 +98,10 @@ def let_start(request):
         )
         owner.save()
         user.groups.add(Group.objects.get(name='Owner'))
-        sendContext['type'] = 'Owner'
 
         login(request, user)
 
-        return render(request, template_name='Main/index.html', context=sendContext)
+        return redirect('index')
 
     return render(request, template_name='Account/start.html', context=context)
 
@@ -160,13 +152,6 @@ def register(request):
         )
         account.save()
 
-        sendContext = {
-            'fname': first_name,
-            'lname': last_name,
-            'email': email,
-            'username': username
-        }
-
         employee = Employee(
             user=User.objects.get(username=username),
             owner_id=Owner.objects.get(user_id=request.user.id),
@@ -195,10 +180,9 @@ def register(request):
 
             employee.employee_type = 'SO'
             user.groups.add(Group.objects.get(name='Sale_Officer'))
-            sendContext['type'] = 'Sale Officer'
         employee.save()
 
-        return render(request, template_name='Main/index.html', context=sendContext)
+        return redirect('index')
 
     return render(request, template_name='Account/register.html', context=context)
 
