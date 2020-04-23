@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 
 from Manage.models import Customer
-from Manage.forms import addCustomerForm
+from Manage.forms import addCustomerForm, addSupplierForm
 
 
 # Create your views here.
@@ -46,3 +46,13 @@ def add_customer(request):
         context['form'] = form
 
     return render(request, template_name='Add/add_customer.html', context=context)
+
+@login_required
+def manage_supplier(request):
+    return render(request, template_name='Manage/manage_supplier.html')
+
+
+@login_required
+def add_supplier(request):
+    form = addSupplierForm()
+    return render(request, template_name='Add/add_supplier.html', context={'form': form})

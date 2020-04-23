@@ -1,7 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from django.core.validators import EmailValidator
-from Manage.models import Customer
+from Manage.models import Customer, Supplier
 
 
 class addCustomerForm(forms.ModelForm):
@@ -36,3 +36,20 @@ class addCustomerForm(forms.ModelForm):
                 code='invalid'
             )
         return data
+
+class addSupplierForm(forms.ModelForm):
+    class Meta:
+        model = Supplier
+        fields = ('name', 'email', 'phone', 'address')
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control mt-0 mb-2'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control mt-0 mb-2'}),
+            'phone': forms.TextInput(attrs={'class': 'form-control mt-0 mb-2'}),
+            'address': forms.Textarea(attrs={'class': 'form-control mt-0 mb-2', 'rows': 4})
+        }
+        labels = {
+            'name': 'ชื่อ-นามสกุล',
+            'email': 'อีเมล์',
+            'phone': 'เบอร์มือถือ',
+            'address': 'ที่อยู่',
+        }
