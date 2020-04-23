@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import User, Group, Permission
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, permission_required
 from .models import Account, Owner, Employee
@@ -103,16 +103,36 @@ def register(request):
                 department=request.POST.get('department')
             )
             if acc_type == 'po':
+                try:
+                    Group.objects.get(name='Purchasing_Officer')
+                except:
+                    g_po = Group.objects.create(name='Purchasing_Officer')
+                    # l_po = []
+                    # g_po.permissions.set(l_po)
+
                 employee.employee_type = 'PO'
                 user.groups.add(Group.objects.get(name='Purchasing_Officer'))
                 context2['type'] = 'Purchasing Officer'
             elif acc_type == 'so':
+                try:
+                    Group.objects.get(name='Sale_Officer')
+                except:
+                    g_so = Group.objects.create(name='Sale_Officer')
+                    # l_so = []
+                    # g_so.permissions.set(l_so)
+
                 employee.employee_type = 'SO'
                 user.groups.add(Group.objects.get(name='Sale_Officer'))
                 context2['type'] = 'Sale Officer'
             employee.save()
 
         else:
+            try:
+                Group.objects.get(name='Owner')
+            except:
+                g_o = Group.objects.create(name='Owner')
+                l_o = [Permission.objects.get(name='Can add employee')]
+                g_o.permissions.set(l_o)
             owner = Owner(
                 user=User.objects.get(username=username),
                 shop_name=request.POST.get('shop_name')

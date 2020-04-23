@@ -11,7 +11,7 @@ class Owner(models.Model):
 
 class Employee(models.Model):
     department = models.CharField(max_length=255)
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     owner_id = models.ForeignKey(Owner, on_delete=models.CASCADE)
 
     EMPLOYEE_TYPE_CHOICES = [
