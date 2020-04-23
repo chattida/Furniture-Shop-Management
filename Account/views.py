@@ -8,6 +8,10 @@ from .models import Account, Owner, Employee
 def my_login(request):
     context = {}
 
+    if Owner.objects.all().count() == 0:
+        print('Gooooooooooo')
+        return redirect('start')
+
     # Check already login
     if request.user.is_authenticated:
         return redirect('index')
@@ -41,6 +45,70 @@ def my_login(request):
         context['next_url'] = next_url
 
     return render(request, template_name='Account/login.html', context=context)
+
+
+def let_start(request):
+    context = {}
+    # Get detail in form
+    if (request.method == 'POST'):
+        first_name = request.POST.get('fname')
+        last_name = request.POST.get('lname')
+        email = request.POST.get('email')
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        phone = request.POST.get('phone')
+
+        context = {
+            'fname': first_name,
+            'lname': last_name,
+            'email': email,
+            'username': username,
+            'password': password,
+            'phone': phone
+        }
+
+        # Add user to DB
+        user = User.objects.create_user(
+            username=username,
+            password=password,
+            first_name=first_name,
+            last_name=last_name,
+            email=email
+        )
+
+        account = Account(
+            user=User.objects.get(username=username),
+            phone=phone
+        )
+        account.save()
+
+        sendContext = {
+            'fname': first_name,
+            'lname': last_name,
+            'email': email,
+            'username': username
+        }
+
+        try:
+            Group.objects.get(name='Owner')
+        except:
+            g_o = Group.objects.create(name='Owner')
+            l_o = [Permission.objects.get(name='Can add employee')]
+            g_o.permissions.set(l_o)
+
+        owner = Owner(
+            user=User.objects.get(username=username),
+            shop_name=request.POST.get('shop_name')
+        )
+        owner.save()
+        user.groups.add(Group.objects.get(name='Owner'))
+        sendContext['type'] = 'Owner'
+
+        login(request, user)
+
+        return render(request, template_name='Main/index.html', context=sendContext)
+
+    return render(request, template_name='Account/start.html', context=context)
 
 
 @login_required
@@ -89,59 +157,45 @@ def register(request):
         )
         account.save()
 
-        context2 = {
+        sendContext = {
             'fname': first_name,
             'lname': last_name,
             'email': email,
             'username': username
         }
 
-        if acc_type != 'owner':
-            employee = Employee(
-                user=User.objects.get(username=username),
-                owner_id=Owner.objects.get(user_id=request.user.id),
-                department=request.POST.get('department')
-            )
-            if acc_type == 'po':
-                try:
-                    Group.objects.get(name='Purchasing_Officer')
-                except:
-                    g_po = Group.objects.create(name='Purchasing_Officer')
-                    # l_po = []
-                    # g_po.permissions.set(l_po)
+        employee = Employee(
+            user=User.objects.get(username=username),
+            owner_id=Owner.objects.get(user_id=request.user.id),
+            department=request.POST.get('department')
+        )
 
-                employee.employee_type = 'PO'
-                user.groups.add(Group.objects.get(name='Purchasing_Officer'))
-                context2['type'] = 'Purchasing Officer'
-            elif acc_type == 'so':
-                try:
-                    Group.objects.get(name='Sale_Officer')
-                except:
-                    g_so = Group.objects.create(name='Sale_Officer')
-                    # l_so = []
-                    # g_so.permissions.set(l_so)
-
-                employee.employee_type = 'SO'
-                user.groups.add(Group.objects.get(name='Sale_Officer'))
-                context2['type'] = 'Sale Officer'
-            employee.save()
-
-        else:
+        if acc_type == 'po':
             try:
-                Group.objects.get(name='Owner')
+                Group.objects.get(name='Purchasing_Officer')
             except:
-                g_o = Group.objects.create(name='Owner')
-                l_o = [Permission.objects.get(name='Can add employee')]
-                g_o.permissions.set(l_o)
-            owner = Owner(
-                user=User.objects.get(username=username),
-                shop_name=request.POST.get('shop_name')
-            )
-            owner.save()
-            user.groups.add(Group.objects.get(name='Owner'))
-            context2['type'] = 'Owner'
+                g_po = Group.objects.create(name='Purchasing_Officer')
+                # l_po = []
+                # g_po.permissions.set(l_po)
 
-        return render(request, template_name='Main/index.html', context=context2)
+            employee.employee_type = 'PO'
+            user.groups.add(Group.objects.get(name='Purchasing_Officer'))
+            sendContext['type'] = 'Purchasing Officer'
+
+        elif acc_type == 'so':
+            try:
+                Group.objects.get(name='Sale_Officer')
+            except:
+                g_so = Group.objects.create(name='Sale_Officer')
+                # l_so = []
+                # g_so.permissions.set(l_so)
+
+            employee.employee_type = 'SO'
+            user.groups.add(Group.objects.get(name='Sale_Officer'))
+            sendContext['type'] = 'Sale Officer'
+        employee.save()
+
+        return render(request, template_name='Main/index.html', context=sendContext)
 
     return render(request, template_name='Account/register.html', context=context)
 

@@ -2,9 +2,9 @@
 {% load static %}
 
 {% block content %}
-    <form method="POST" class="w-100" action="{% url 'register' %}">
+    <form method="POST" class="w-100" action="{% url 'start' %}">
         {% csrf_token %}
-        <h1 class="my-4 text-dark">Register</h1>
+        <h1 class="my-4 text-dark">Hi New (Owner) let's Get Start Now</h1>
 
         <div class="form-group text-dark">
             <label for="fname">FirstName *</label>
@@ -36,26 +36,15 @@
             <input type="phone" class="form-control w-100 border rounded bg-light" value="{{phone}}" name='phone' required>
         </div>
 
-        <input type="radio" id="po" name="type" value="po" checked>
-        <label for="po">Purchasing Officer</label><br>
-        <input type="radio" id="so" name="type" value="so">
-        <label for="so">Sale Officer</label>
-
         <div class="form-group text-dark">
-            <label for="department">Department *</label>
-            <input type="text" class="form-control w-100 border rounded bg-light" value="{{department}}" name='department' required>
+            <label for="shop_name">Shop Name *</label>
+            <input type="text" class="form-control w-100 border rounded bg-light" value="{{shop_name}}" name='shop_name' required>
         </div>
 
         {% if error %}
           <p class="text-dark">{{error}}</p>
         {% endif %}
-        <div class="row">
-            <div class="col-md-6 p-1">
-                <a href="{% url 'index' %}" class="btn btn-light w-100">Home</a>
-            </div>
-            <div class="col-md-6 p-1">
-                <input type="submit" value="Submit" class="btn btn-dark w-100">
-            </div>
-        </div>
+
+        <input type="submit" value="Submit" class="btn btn-dark w-100">
     </form>
 {% endblock %}

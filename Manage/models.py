@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-
 class Customer(models.Model):
     fname = models.CharField(max_length=255)
     lname = models.CharField(max_length=255)
