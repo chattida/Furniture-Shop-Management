@@ -1,4 +1,6 @@
 from django import forms
+from django.core.exceptions import ValidationError
+from django.core.validators import EmailValidator
 from Manage.models import Customer
 
 
@@ -20,3 +22,17 @@ class addCustomerForm(forms.ModelForm):
             'phone': 'เบอร์มือถือ',
             'address': 'ที่อยู่',
         }
+        error_messages = {
+            'email': {
+                'invalid': ("กรุณากรอกอีเมล์ให้ถูกต้อง"),
+            }
+        }
+
+    def clean_phone(self):
+        data = self.cleaned_data.get('phone')
+        if len(data) != 10:
+            raise ValidationError(
+                'กรุณากรอกเบอร์มือถือให้ถูกต้อง',
+                code='invalid'
+            )
+        return data

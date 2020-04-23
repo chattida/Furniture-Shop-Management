@@ -33,14 +33,14 @@ body {
 }
 
 .square-orange {
-    width: 50%;
-    background-color: #ff6601;
+    width: 50% !important;
+    background-color: #ff6601 !important;
 }
 
 .square-gray {
-    width: 50%;
-    padding-bottom: 10%;
-    background-color: #343a40;
+    width: 50% !important;
+    padding-bottom: 10% !important;
+    background-color: #343a40 !important;
 }
 
 .btn-orange {
@@ -53,6 +53,11 @@ body {
 }
 
 .img-login {
-    height: 20vw;
-    margin-top: 25%;
+    height: 20vw !important;
+    margin-top: 25% !important;
+}
+
+.text-error {
+    color: #ff0000 !important;
+    font-size: 0.9rem !important;
 }

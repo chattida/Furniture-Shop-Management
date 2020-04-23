@@ -1,14 +1,15 @@
 {% extends "base.html" %} {% block content %}
 <h5 class="mt-4"><i class="fas fa-user-plus"></i> เพิ่มลูกค้าใหม่</h5>
 <hr class="my-3 hr-orange" />
-<form action="" method="POST">
+<form action="{% url 'add_customer' %}" method="POST">
   {% csrf_token %} {% for field in form %}
   <div class="row">
     <div class="col-8 mx-auto">
       <label for="{{ field.id_for_label }}" class="mt-1"
         >{{ field.label }}:</label
       >
-      {{ field }} {{ field.errors }}
+      {{ field }}
+      <p class="text-error my-1">{{ field.errors.as_text }}</p>
     </div>
   </div>
   {% endfor %}
