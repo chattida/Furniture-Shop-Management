@@ -1,61 +1,57 @@
-{% extends "base.html" %}
-{% load static %}
+{% extends "base.html" %} {% block content %}
+<h5 class="mt-4"><i class="fas fa-user-plus"></i> เพิ่มพนักงานใหม่</h5>
+<hr class="my-3 hr-orange" />
+<form action="{% url 'register' %}" method="POST">
+  {% csrf_token %}
+  <div class="form-group text-dark col-8 mx-auto">
+      <label for="fname">ชื่อจริง:</label>
+      <input type="text" class="form-control mt-0 mb-2" value="{{fname}}" name='fname' required>
+  </div>
 
-{% block content %}
-    <form method="POST" class="w-100" action="{% url 'register' %}">
-        {% csrf_token %}
-        <h1 class="my-4 text-dark">Register</h1>
+  <div class="form-group text-dark col-8 mx-auto">
+      <label for="lname">นามสกุล:</label>
+      <input type="text" class="form-control mt-0 mb-2" value="{{lname}}" name='lname' required>
+  </div>
 
-        <div class="form-group text-dark">
-            <label for="fname">FirstName *</label>
-            <input type="text" class="form-control w-100 border rounded bg-light" value="{{fname}}" name='fname' required>
-        </div>
+  <div class="form-group text-dark col-8 mx-auto">
+      <label for="email">อีเมล์:</label>
+      <input type="email" class="form-control mt-0 mb-2" value="{{email}}" name='email' required>
+  </div>
 
-        <div class="form-group text-dark">
-            <label for="lname">LastName *</label>
-            <input type="text" class="form-control w-100 border rounded bg-light" value="{{lname}}" name='lname' required>
-        </div>
+  <div class="form-group text-dark col-8 mx-auto">
+      <label for="username">Username *</label>
+      <input type="text" class="form-control mt-0 mb-2" value="{{username}}" name='username' required>
+  </div>
 
-        <div class="form-group text-dark">
-            <label for="email">Email *</label>
-            <input type="email" class="form-control w-100 border rounded bg-light" value="{{email}}" name='email' required>
-        </div>
+  <div class="form-group text-dark col-8 mx-auto">
+      <label for="password">รหัสผ่าน:</label>
+      <input type="password" class="form-control mt-0 mb-2" value="{{password}}" name='password' required>
+  </div>
 
-        <div class="form-group text-dark">
-            <label for="username">Username *</label>
-            <input type="text" class="form-control w-100 border rounded bg-light" value="{{username}}" name='username' required>
-        </div>
+  <div class="form-group text-dark col-8 mx-auto">
+      <label for="password2">ยืนยันรหัสผ่าน:</label>
+      <input type="password" class="form-control mt-0 mb-2" value="{{password2}}" name='password2' required>
+  </div>
 
-        <div class="form-group text-dark">
-            <label for="password">Password *</label>
-            <input type="password" class="form-control w-100 border rounded bg-light" value="{{password}}" name='password' required>
-        </div>
+  <div class="form-group text-dark col-8 mx-auto">
+      <label for="phone">เบอร์มือถือ:</label>
+      <input type="phone" class="form-control mt-0 mb-2" value="{{phone}}" name='phone' required>
+  </div>
 
-        <div class="form-group text-dark">
-            <label for="password2">Confirm Password *</label>
-            <input type="password" class="form-control w-100 border rounded bg-light" value="{{password2}}" name='password2' required>
-        </div>
-
-        <div class="form-group text-dark">
-            <label for="phone">Phone *</label>
-            <input type="phone" class="form-control w-100 border rounded bg-light" value="{{phone}}" name='phone' required>
-        </div>
-
-        <input type="radio" id="po" name="type" value="po" checked>
-        <label for="po">Purchasing Officer</label><br>
-        <input type="radio" id="so" name="type" value="so">
-        <label for="so">Sale Officer</label>
-
-        {% if error %}
-          <p class="text-dark">{{error}}</p>
-        {% endif %}
-        <div class="row">
-            <div class="col-md-6 p-1">
-                <a href="{% url 'index' %}" class="btn btn-light w-100">Home</a>
-            </div>
-            <div class="col-md-6 p-1">
-                <input type="submit" value="Submit" class="btn btn-dark w-100">
-            </div>
-        </div>
-    </form>
-{% endblock %}
+  <div class="form-group text-dark col-8 mx-auto">
+    <label for="type">ฝ่าย:</label>
+    <input type="radio" id="po" name="type" value="po" class="ml-2" checked>
+    <label for="po">ฝ่ายจัดซื้อ</label>
+    <input type="radio" id="so" name="type" value="so" class="ml-2">
+    <label for="so">ฝ่ายขาย</label>
+  </div>
+  {% if error %}
+  <div class="col-8 mx-auto">
+    <p class="text-error my-1">{{error}}</p>
+  </div>
+  {% endif %}
+  <div class="text-center">
+    <input type="submit" value="เพิ่มพนักงานใหม่" class="btn btn-orange my-2" />
+  </div>
+</form>
+{% endblock content %}
