@@ -1,0 +1,41 @@
+{% extends "base.html" %} {% block content %}
+<div class="mt-4 d-flex">
+  <h5 class="align-self-end">
+    <i class="fas fa-user-friends"></i> จัดการข้อมูลพนักงาน
+  </h5>
+  <a href="{% url 'add_customer' %}" class="btn btn-orange ml-auto"
+    ><i class="fas fa-user-plus"></i> เพิ่มพนักงานใหม่</a
+  >
+</div>
+<hr class="mt-2 mb-3 hr-orange" />
+<div class="table-responsive">
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th scope="col">รหัสพนักงาน</th>
+        <th scope="col">ชื่อจริง</th>
+        <th scope="col">นามสกุล</th>
+        <th scope="col">เบอร์</th>
+        <th scope="col">อีเมล์</th>
+        <th scope="col">ฝ่าย</th>
+        <th scope="col">จัดการ</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">1</th>
+        <td>นายทดสอบ</td>
+        <td>ข้อมูลลูกค้า</td>
+        <td>089-321-4847</td>
+        <td>admin@company.com</td>
+        <td>Sale Officer</td>
+        <td>
+          <button class="btn btn-warning">
+            <i class="fas fa-user-edit"></i> แก้ไขข้อมูล
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+{% endblock content %}

@@ -80,3 +80,7 @@ def add_supplier(request):
         context['form'] = form
 
     return render(request, template_name='Add/add_supplier.html', context={'form': form})
+
+@login_required
+def manage_employee(request):
+    return render(request, template_name='Manage/manage_employee.html')
