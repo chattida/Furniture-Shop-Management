@@ -6,8 +6,11 @@ from .models import Account, Owner, Employee
 
 
 def my_login(request):
-    logout(request)
     context = {}
+
+    # Check already login
+    if request.user.is_authenticated:
+        return redirect('index')
 
     # Get detail in form
     if request.method == 'POST':
@@ -41,7 +44,7 @@ def my_login(request):
 
 
 @login_required
-@permission_required('Account.add_employee', login_url='login')
+@permission_required('Account.add_employee')
 def register(request):
     context = {}
     # Get detail in form
