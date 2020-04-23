@@ -25,6 +25,7 @@ class addCustomerForm(forms.ModelForm):
         error_messages = {
             'email': {
                 'invalid': ("กรุณากรอกอีเมล์ให้ถูกต้อง"),
+                'unique': ("อีเมลล์มีอยู่ในระบบแล้ว")
             }
         }
 
@@ -48,8 +49,23 @@ class addSupplierForm(forms.ModelForm):
             'address': forms.Textarea(attrs={'class': 'form-control mt-0 mb-2', 'rows': 4})
         }
         labels = {
-            'name': 'ชื่อ-นามสกุล',
+            'name': 'ชื่อบริษัท',
             'email': 'อีเมล์',
             'phone': 'เบอร์มือถือ',
             'address': 'ที่อยู่',
         }
+        error_messages = {
+            'email': {
+                'invalid': ("กรุณากรอกอีเมล์ให้ถูกต้อง"),
+                'unique': ("อีเมลล์มีอยู่ในระบบแล้ว")
+            }
+        }
+
+    def clean_phone(self):
+        data = self.cleaned_data.get('phone')
+        if len(data) != 10:
+            raise ValidationError(
+                'กรุณากรอกเบอร์มือถือให้ถูกต้อง',
+                code='invalid'
+            )
+        return data
