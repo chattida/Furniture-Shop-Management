@@ -32,6 +32,11 @@
         </div>
 
         <div class="form-group text-dark">
+            <label for="password2">Confirm Password *</label>
+            <input type="password2" class="form-control w-100 border rounded bg-light" value="{{password2}}" name='password2' required>
+        </div>
+
+        <div class="form-group text-dark">
             <label for="phone">Phone *</label>
             <input type="phone" class="form-control w-100 border rounded bg-light" value="{{phone}}" name='phone' required>
         </div>
@@ -40,11 +45,6 @@
         <label for="po">Purchasing Officer</label><br>
         <input type="radio" id="so" name="type" value="so">
         <label for="so">Sale Officer</label>
-
-        <div class="form-group text-dark">
-            <label for="department">Department *</label>
-            <input type="text" class="form-control w-100 border rounded bg-light" value="{{department}}" name='department' required>
-        </div>
 
         {% if error %}
           <p class="text-dark">{{error}}</p>

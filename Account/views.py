@@ -117,6 +117,7 @@ def register(request):
         email = request.POST.get('email')
         username = request.POST.get('username')
         password = request.POST.get('password')
+        password = request.POST.get('password2')
         phone = request.POST.get('phone')
         acc_type = request.POST.get('type')
 
@@ -136,6 +137,9 @@ def register(request):
         elif (User.objects.filter(email=email).exists()):
             context['error'] = 'Email is already used!'
             return render(request, 'Account/register.html', context=context)
+        elif password != password2:
+            context['error'] = 'Password not match!'
+            return render(request, 'Account/register.html', context=context)
 
         # Add user to DB
         user = User.objects.create_user(
@@ -154,8 +158,7 @@ def register(request):
 
         employee = Employee(
             user=User.objects.get(username=username),
-            owner_id=Owner.objects.get(user_id=request.user.id),
-            department=request.POST.get('department')
+            owner_id=Owner.objects.get(user_id=request.user.id)
         )
 
         if acc_type == 'po':
@@ -166,9 +169,8 @@ def register(request):
                 # l_po = []
                 # g_po.permissions.set(l_po)
 
-            employee.employee_type = 'PO'
+            employee.department = 'PO'
             user.groups.add(Group.objects.get(name='Purchasing_Officer'))
-            sendContext['type'] = 'Purchasing Officer'
 
         elif acc_type == 'so':
             try:
@@ -178,7 +180,7 @@ def register(request):
                 # l_so = []
                 # g_so.permissions.set(l_so)
 
-            employee.employee_type = 'SO'
+            employee.department = 'SO'
             user.groups.add(Group.objects.get(name='Sale_Officer'))
         employee.save()
 
@@ -201,16 +203,22 @@ def change_password(request):
 
     # Get detail in form
     if request.method == 'POST':
-        password1 = request.POST.get('npass1')
-        password2 = request.POST.get('npass2')
+        oldpass = request.POST.get('opass')
+        newpass1 = request.POST.get('npass1')
+        newpass2 = request.POST.get('npass2')
+
+        check = authenticate(request, username=user.username, password=oldpass)
 
         # Check password matching
-        if password1 != password2:
+        if not check:
+            context['error'] = 'Old Password not correct!'
+            return render(request, template_name='Account/change_password.html', context=context)
+        if newpass1 != newpass2:
             context['error'] = 'Password not match!'
             return render(request, template_name='Account/change_password.html', context=context)
 
         # Set password to DB
-        user.set_password(password1)
+        user.set_password(newpass1)
         user.save()
         logout(request)
         return redirect('login')

@@ -12,12 +12,10 @@ class Owner(models.Model):
 
 
 class Employee(models.Model):
-    department = models.CharField(max_length=255)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    owner_id = models.ForeignKey(Owner, on_delete=models.CASCADE)
-
     EMPLOYEE_TYPE_CHOICES = [
         ('PO', 'PURCHASING_OFFICER'),
         ('SO', 'SALE_OFFICER')
     ]
-    employee_type = models.CharField(max_length=2, choices=EMPLOYEE_TYPE_CHOICES, null=False)
+    department = models.CharField(max_length=2, choices=EMPLOYEE_TYPE_CHOICES, null=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    owner_id = models.ForeignKey(Owner, on_delete=models.CASCADE)
