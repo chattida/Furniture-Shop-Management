@@ -8,21 +8,23 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from API.serializers import stockSerializer, supplierSerializer
-from Manage.models import Stock, Supplier
+from Manage.models import Stock, Supplier, Customer, Stock
+from Account.models import Employee
 
 # Create your views here.
 
 
 class api_supplier(APIView):
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        #get search
+        # get parameter search
         try:
             search = request.query_params['search']
         except:
             search = False
 
-        #get id
+        # get parameter id
         try:
             id = request.query_params['id']
         except:
@@ -48,11 +50,53 @@ class api_supplier(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    def delete(self, request):
+        data = json.loads(request.body)
+        supplier = Supplier.objects.get(pk=data.get('id'))
+        supplier.delete()
+        return Response(status=status.HTTP_200_OK)
 
-class api_view_stock(APIView):
+
+class api_stock(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
         items = Stock.objects.all()
         serializer = stockSerializer(items, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def delete(self, request):
+        data = json.loads(request.body)
+        stock = Stock.objects.get(pk=data.get('id'))
+        stock.delete()
+        return Response(status=status.HTTP_200_OK)
+
+
+class api_employee(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request):
+        data = json.loads(request.body)
+        employee = Employee.objects.get(pk=data.get('id'))
+        employee.delete()
+        return Response(status=status.HTTP_200_OK)
+
+
+class api_customer(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request):
+        data = json.loads(request.body)
+        customer = Customer.objects.get(pk=data.get('id'))
+        customer.delete()
+        return Response(status=status.HTTP_200_OK)
+
+
+class api_item(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request):
+        data = json.loads(request.body)
+        item = Item.objects.get(pk=data.get('id'))
+        item.delete()
+        return Response(status=status.HTTP_200_OK)

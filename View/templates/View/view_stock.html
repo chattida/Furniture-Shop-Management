@@ -21,7 +21,7 @@
   };
 
   function initialize() {
-    axios.get("/api/view_stock/").then(function (response) {
+    axios.get("/api/stock/").then(function (response) {
       data = response.data;
 
       let table = document.getElementById("data_list");
