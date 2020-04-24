@@ -1,7 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from django.core.validators import EmailValidator
-from Manage.models import Customer, Supplier, Item
+from Manage.models import Customer, Supplier, Item, Stock
 from Account.models import Account, Employee
 
 
@@ -96,5 +96,26 @@ class addItemForm(forms.ModelForm):
         error_messages = {
             'supplier_id': {
                 'invalid_choice': ("ไม่พบข้อมูลผู้ผลิต")
+            }
+        }
+
+
+class addStockForm(forms.ModelForm):
+    class Meta:
+        model = Stock
+        fields = ('color', 'amount', 'item_id')
+        widgets = {
+            'color': forms.TextInput(attrs={'class': 'form-control mt-0 mb-2'}),
+            'amount': forms.TextInput(attrs={'class': 'form-control mt-0 mb-2'}),
+            'item_id': forms.TextInput(attrs={'class': 'form-control mt-0 mb-2'})
+        }
+        labels = {
+            'color': 'สี',
+            'amount': 'จำนวนสินค้าในสต๊อก',
+            'item_id': 'รหัสสินค้า'
+        }
+        error_messages = {
+            'item_id': {
+                'invalid_choice': ("ไม่พบข้อมูลสินค้า")
             }
         }

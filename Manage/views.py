@@ -4,16 +4,13 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 
-from Manage.models import Customer, Supplier, Item
+from Manage.models import Customer, Supplier, Item, Stock
 from Account.models import Account, Employee, Owner
 
-from Manage.forms import addCustomerForm, addSupplierForm, addItemForm
+from Manage.forms import addCustomerForm, addSupplierForm, addItemForm, addStockForm
+
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
-
-
-
-# Create your views here.
 
 
 @login_required
@@ -224,5 +221,60 @@ def delete_item_api(request, item_id):
     if request.method == 'DELETE':
         item = Item.objects.get(id=item_id)
         item.delete()
+        return HttpResponse(status=200)
+    return HttpResponse(status=405)
+
+
+@login_required
+def manage_stock(request):
+    context = {'all_stock': []}
+    stocks = Stock.objects.all()
+    for stock in stocks:
+        info = {
+            'id': stock.id,
+            'color': stock.color,
+            'amount': stock.amount,
+            'item_id': stock.item_id.id
+        }
+        context['all_stock'].append(info)
+
+    return render(request, template_name='Manage/manage_stock.html', context=context)
+
+
+@login_required
+def add_stock(request):
+    context = {}
+    if request.method == 'POST':
+        color = request.POST.get('color')
+        amount = request.POST.get('amount')
+        try:
+            item_id = request.POST.get('item_id')
+            item = Item.objects.get(pk=item_id)
+        except:
+            pass
+        form = addStockForm(request.POST)
+        if form.is_valid():
+            stock = Stock.objects.create(
+                color=color,
+                amount=amount,
+                item_id=item
+            )
+            return redirect('manage_stock')
+        else:
+            context['form'] = form
+
+    elif request.method == 'GET':
+        form = addStockForm()
+        context['form'] = form
+
+    return render(request, template_name='Add/add_stock.html', context={'form': form})
+
+
+@login_required
+@csrf_exempt
+def delete_stock_api(request, stock_id):
+    if request.method == 'DELETE':
+        stock = Stock.objects.get(id=stock_id)
+        stock.delete()
         return HttpResponse(status=200)
     return HttpResponse(status=405)
