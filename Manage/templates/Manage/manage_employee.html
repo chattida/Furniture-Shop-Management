@@ -22,19 +22,21 @@
       </tr>
     </thead>
     <tbody>
+      {% for employee in all_employee%}
       <tr>
-        <th scope="row">1</th>
-        <td>นายทดสอบ</td>
-        <td>ข้อมูลลูกค้า</td>
-        <td>089-321-4847</td>
-        <td>admin@company.com</td>
-        <td>Sale Officer</td>
+        <th scope="row">{{ employee.id }}</th>
+        <td>{{ employee.fname }}</td>
+        <td>{{ employee.lname }}</td>
+        <td>{{ employee.phone }}</td>
+        <td>{{ employee.email }}</td>
+        <td>{{ employee.department }}</td>
         <td>
           <button class="btn btn-warning">
             <i class="fas fa-user-edit"></i> แก้ไขข้อมูล
           </button>
         </td>
       </tr>
+      {% endfor %}
     </tbody>
   </table>
 </div>

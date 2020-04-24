@@ -2,6 +2,8 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.core.validators import EmailValidator
 from Manage.models import Customer, Supplier
+from Account.models import Account, Employee
+
 
 
 class addCustomerForm(forms.ModelForm):

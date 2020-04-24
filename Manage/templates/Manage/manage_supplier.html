@@ -13,26 +13,28 @@
     <thead class="thead-dark text-center">
       <tr>
         <th scope="col">รหัสผู้ผลิต</th>
-        <th scope="col">ชื่อจริง</th>
-        <th scope="col">นามสกุล</th>
+        <th scope="col">ชื่อ</th>
+        <th scope="col">ที่อยู่</th>
         <th scope="col">เบอร์</th>
         <th scope="col">อีเมล์</th>
         <th scope="col">จัดการ</th>
       </tr>
     </thead>
     <tbody>
+      {% for supplier in all_supplier%}
       <tr>
-        <th scope="row">1</th>
-        <td>นายทดสอบ</td>
-        <td>ข้อมูลผู้ผลิต</td>
-        <td>089-321-4847</td>
-        <td>admin@company.com</td>
-        <td class="text-center">
+        <th scope="row">{{ supplier.id }}</th>
+        <td>{{ supplier.name }}</td>
+        <td>{{ supplier.address }}</td>
+        <td>{{ supplier.phone }}</td>
+        <td>{{ supplier.email }}</td>
+        <td>
           <button class="btn btn-warning">
             <i class="fas fa-user-edit"></i> แก้ไขข้อมูล
           </button>
         </td>
       </tr>
+      {% endfor %}
     </tbody>
   </table>
 </div>

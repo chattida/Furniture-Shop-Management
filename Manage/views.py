@@ -5,6 +5,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 
 from Manage.models import Customer, Supplier
+from Account.models import Account, Employee, Owner
+
 from Manage.forms import addCustomerForm, addSupplierForm
 
 
@@ -83,4 +85,51 @@ def add_supplier(request):
 
 @login_required
 def manage_employee(request):
-    return render(request, template_name='Manage/manage_employee.html')
+    context = {'all_employee': []}
+    employees = Employee.objects.all()
+    for employee in employees:
+        user = User.objects.get(id=employee.user_id)
+        account = Account.objects.get(user_id=employee.user_id)
+        info = {
+            'id': employee.id,
+            'fname': user.first_name,
+            'lname': user.last_name,
+            'email': user.email,
+            'phone': account.phone,
+            'department': employee.get_department_display
+        }
+        context['all_employee'].append(info)
+
+    return render(request, template_name='Manage/manage_employee.html', context=context)
+
+@login_required
+def manage_customer(request):
+    context = {'all_customer': []}
+    customers = Customer.objects.all()
+    for customer in customers:
+        info = {
+            'id': customer.id,
+            'fname': customer.fname,
+            'lname': customer.lname,
+            'email': customer.email,
+            'phone': customer.phone
+        }
+        context['all_customer'].append(info)
+
+    return render(request, template_name='Manage/manage_customer.html', context=context)
+
+@login_required
+def manage_supplier(request):
+    context = {'all_supplier': []}
+    suppliers = Supplier.objects.all()
+    for supplier in suppliers:
+        info = {
+            'id': supplier.id,
+            'name': supplier.name,
+            'address': supplier.address,
+            'email': supplier.email,
+            'phone': supplier.phone
+        }
+        context['all_supplier'].append(info)
+
+    return render(request, template_name='Manage/manage_supplier.html', context=context)
