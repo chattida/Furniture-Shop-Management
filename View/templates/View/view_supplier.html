@@ -47,7 +47,7 @@
       delay_search(search_box.value, 100);
     });
 
-    axios.get("/api/view_supplier/").then(function (response) {
+    axios.get("/api/supplier/").then(function (response) {
       data = response.data;
 
       let table = document.getElementById("data_list");
@@ -68,7 +68,7 @@
 
   function search(value) {
     axios
-      .get("/api/view_supplier/", {
+      .get("/api/supplier/", {
         params: {
           search: value,
         },

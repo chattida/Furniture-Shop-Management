@@ -1,3 +1,5 @@
+import json
+
 from django.db.models import Q
 from django.shortcuts import render
 from rest_framework import status
@@ -5,14 +7,14 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from API.serializers import supplierSerializer, stockSerializer
-from Manage.models import Supplier, Stock
+from API.serializers import stockSerializer, supplierSerializer
+from Manage.models import Stock, Supplier
 
 # Create your views here.
 
 
-class api_view_supplier(APIView):
-    permission_classes = [IsAuthenticated]
+class api_supplier(APIView):
+    # permission_classes = [IsAuthenticated]
 
     def get(self, request):
         try:
@@ -26,6 +28,16 @@ class api_view_supplier(APIView):
             items = Supplier.objects.all()
         serializer = supplierSerializer(items, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def put(self, request):
+        data = json.loads(request.body)
+        instance = Supplier.objects.get(pk=data.get('id'))
+        serializer = supplierSerializer(
+            data=data, instance=instance, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class api_view_stock(APIView):
