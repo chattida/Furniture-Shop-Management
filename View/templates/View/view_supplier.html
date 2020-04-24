@@ -1,6 +1,24 @@
 {% extends "base.html" %} {% block content %}
 <h5 class="mt-4"><i class="fas fa-industry"></i> ตรวจสอบข้อมูลผู้ผลิต</h5>
 <hr class="mt-3 mb-2 hr-orange" />
+<div class="row">
+  <div class="col-4">
+    <div class="input-group my-1">
+      <div class="input-group-prepend">
+        <div class="input-group-text">
+          <i class="fas fa-search"></i>
+        </div>
+      </div>
+      <input
+        id="search_box"
+        type="text"
+        class="form-control"
+        placeholder="ค้นหา"
+      />
+    </div>
+  </div>
+</div>
+
 <div class="table-responsive">
   <table class="table table-bordered">
     <thead>
@@ -17,11 +35,18 @@
 </div>
 <!-- script -->
 <script>
+  let timer;
+
   window.onload = function () {
     initialize();
   };
 
   function initialize() {
+    let search_box = document.getElementById("search_box");
+    search_box.addEventListener("keyup", () => {
+      delay_search(search_box.value, 100);
+    });
+
     axios.get("/api/view_supplier/").then(function (response) {
       data = response.data;
 
@@ -39,6 +64,40 @@
         table.append(head);
       });
     });
+  }
+
+  function search(value) {
+    axios
+      .get("/api/view_supplier/", {
+        params: {
+          search: value,
+        },
+      })
+      .then(function (response) {
+        data = response.data;
+
+        let table = document.getElementById("data_list");
+        table.innerHTML = "";
+
+        data.forEach((supplier) => {
+          let head = document.createElement("tr");
+          for (let item in supplier) {
+            if (item !== "account_id") {
+              let td = document.createElement("td");
+              td.innerText = supplier[item];
+              head.append(td);
+            }
+          }
+          table.append(head);
+        });
+      });
+  }
+
+  function delay_search(value, ms) {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      search(value);
+    }, ms);
   }
 </script>
 {% endblock content %}
