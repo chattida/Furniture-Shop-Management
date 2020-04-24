@@ -133,3 +133,6 @@ dmypy.json
 
 # VScode
 .vscode/
+
+# DB config
+config.py
