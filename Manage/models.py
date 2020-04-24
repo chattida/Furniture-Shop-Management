@@ -7,7 +7,7 @@ class Customer(models.Model):
     email = models.EmailField(max_length=255, unique=True)
     phone = models.CharField(max_length=10)
     address = models.TextField()
-    account_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    account_id = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
 
 
 class Supplier(models.Model):
@@ -15,7 +15,7 @@ class Supplier(models.Model):
     address = models.TextField()
     phone = models.CharField(max_length=10)
     email = models.CharField(max_length=255, unique=True)
-    account_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    account_id = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
 
 
 class Item(models.Model):
