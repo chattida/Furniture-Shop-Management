@@ -14,16 +14,25 @@ from Manage.models import Stock, Supplier
 
 
 class api_supplier(APIView):
-    # permission_classes = [IsAuthenticated]
 
     def get(self, request):
+        #get search
         try:
             search = request.query_params['search']
         except:
             search = False
+
+        #get id
+        try:
+            id = request.query_params['id']
+        except:
+            id = False
+
         if search:
             items = Supplier.objects.filter(Q(name__icontains=search) | Q(
                 address__icontains=search) | Q(phone__icontains=search) | Q(email__icontains=search))
+        elif id:
+            items = Supplier.objects.filter(pk=id)
         else:
             items = Supplier.objects.all()
         serializer = supplierSerializer(items, many=True)
