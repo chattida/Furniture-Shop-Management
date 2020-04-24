@@ -115,7 +115,8 @@ def manage_customer(request):
             'fname': customer.fname,
             'lname': customer.lname,
             'email': customer.email,
-            'phone': customer.phone
+            'phone': customer.phone,
+            'address': customer.address
         }
         context['all_customer'].append(info)
 
