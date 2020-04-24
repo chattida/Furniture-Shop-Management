@@ -7,3 +7,7 @@ from django.contrib.auth.decorators import login_required
 @login_required
 def view_supplier(request):
     return render(request, template_name='View/view_supplier.html')
+
+@login_required
+def view_stock(request):
+    return render(request, template_name='View/view_stock.html')

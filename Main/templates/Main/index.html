@@ -4,12 +4,14 @@
 <div class="row">
   {% if acc_type == 'Owner' or acc_type == 'Sale_Officer' %}
   <div class="col-3 my-3">
-    <div class="card border-orange text-center py-1">
-      <div class="card-body">
-        <h1 class="icon-menu"><i class="fas fa-cubes"></i></h1>
-        <h5 class="my-3"><i class="fas fa-search"></i> ตรวจสอบสต็อกสินค้า</h5>
+    <a href="{% url 'view_stock' %}" class='text-dark'>
+      <div class="card border-orange text-center py-1">
+        <div class="card-body">
+          <h1 class="icon-menu"><i class="fas fa-cubes"></i></h1>
+          <h5 class="my-3"><i class="fas fa-search"></i> ตรวจสอบสต็อกสินค้า</h5>
+        </div>
       </div>
-    </div>
+    </a>
   </div>
   {% endif %}
   {% if acc_type == 'Owner' or acc_type == 'Sale_Officer' %}

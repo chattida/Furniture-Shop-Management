@@ -111,7 +111,7 @@ class addStockForm(forms.ModelForm):
         }
         labels = {
             'color': 'สี',
-            'amount': 'จำนวนสินค้าในสต๊อก',
+            'amount': 'จำนวนสินค้าในสต็อก',
             'item_id': 'รหัสสินค้า'
         }
         error_messages = {
