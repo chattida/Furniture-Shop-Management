@@ -119,6 +119,11 @@ def add_supplier(request):
 
     return render(request, template_name='Add/add_supplier.html', context={'form': form})
 
+@login_required
+def edit_supplier(request):
+    return render(request, template_name='Edit/edit_supplier.html')
+
+
 
 @login_required
 @csrf_exempt

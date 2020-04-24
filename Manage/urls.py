@@ -7,6 +7,7 @@ urlpatterns = [
     path('customer/add/', views.add_customer, name='add_customer'),
     path('supplier/', views.manage_supplier, name='manage_supplier'),
     path('supplier/add/', views.add_supplier, name='add_supplier'),
+    path('supplier/edit/', views.edit_supplier, name='edit_supplier'),
     path('employee/', views.manage_employee, name='manage_employee'),
     path('item/', views.manage_item, name='manage_item'),
     path('item/add/', views.add_item, name='add_item'),
@@ -17,4 +18,5 @@ urlpatterns = [
     path('supplier/api/delete/<int:sup_id>/', views.delete_supplier_api, name='delete_supplier_api'),
     path('item/api/delete/<int:item_id>/', views.delete_item_api, name='delete_item_api'),
     path('stock/api/delete/<int:stock_id>/', views.delete_stock_api, name='delete_stock_api'),
+
 ]
