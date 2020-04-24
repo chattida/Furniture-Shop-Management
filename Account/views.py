@@ -184,7 +184,7 @@ def register(request):
             user.groups.add(Group.objects.get(name='Sale_Officer'))
         employee.save()
 
-        return redirect('index')
+        return redirect('manage_employee')
 
     return render(request, template_name='Account/register.html', context=context)
 
