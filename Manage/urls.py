@@ -8,4 +8,7 @@ urlpatterns = [
     path('supplier/', views.manage_supplier, name='manage_supplier'),
     path('supplier/add/', views.add_supplier, name='add_supplier'),
     path('employee/', views.manage_employee, name='manage_employee'),
+    path('employee/api/delete/<int:emp_id>/', views.delete_employee_api, name='delete_employee_api'),
+    path('customer/api/delete/<int:cus_id>/', views.delete_customer_api, name='delete_customer_api'),
+    path('supplier/api/delete/<int:sup_id>/', views.delete_supplier_api, name='delete_supplier_api')
 ]

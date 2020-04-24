@@ -8,6 +8,9 @@ from Manage.models import Customer, Supplier
 from Account.models import Account, Employee, Owner
 
 from Manage.forms import addCustomerForm, addSupplierForm
+from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse
+
 
 
 # Create your views here.
@@ -133,3 +136,31 @@ def manage_supplier(request):
         context['all_supplier'].append(info)
 
     return render(request, template_name='Manage/manage_supplier.html', context=context)
+
+@login_required
+@csrf_exempt
+def delete_employee_api(request, emp_id):
+    if request.method == 'DELETE':
+        employee = Employee.objects.get(id=emp_id)
+        user = User.objects.get(id=employee.user_id)
+        user.delete()
+        return HttpResponse(status=200)
+    return HttpResponse(status=405)
+
+@login_required
+@csrf_exempt
+def delete_customer_api(request, cus_id):
+    if request.method == 'DELETE':
+        customer = Customer.objects.get(id=cus_id)
+        customer.delete()
+        return HttpResponse(status=200)
+    return HttpResponse(status=405)
+
+@login_required
+@csrf_exempt
+def delete_supplier_api(request, sup_id):
+    if request.method == 'DELETE':
+        supplier = Supplier.objects.get(id=sup_id)
+        supplier.delete()
+        return HttpResponse(status=200)
+    return HttpResponse(status=405)
