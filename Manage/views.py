@@ -1,16 +1,9 @@
-from builtins import object
-
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
-
 from Manage.models import Customer, Supplier, Item, Stock
 from Account.models import Account, Employee, Owner
-
 from Manage.forms import addCustomerForm, addSupplierForm, addItemForm, addStockForm
-
-from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponse
 
 
 @login_required
@@ -64,16 +57,6 @@ def add_customer(request):
 
 
 @login_required
-@csrf_exempt
-def delete_customer_api(request, cus_id):
-    if request.method == 'DELETE':
-        customer = Customer.objects.get(id=cus_id)
-        customer.delete()
-        return HttpResponse(status=200)
-    return HttpResponse(status=405)
-
-
-@login_required
 def manage_supplier(request):
     context = {'all_supplier': []}
     suppliers = Supplier.objects.all()
@@ -119,22 +102,12 @@ def add_supplier(request):
 
     return render(request, template_name='Add/add_supplier.html', context={'form': form})
 
+
 @login_required
 def edit_supplier(request, id):
     context = {}
     context['id'] = id
     return render(request, template_name='Edit/edit_supplier.html', context=context)
-
-
-
-@login_required
-@csrf_exempt
-def delete_supplier_api(request, sup_id):
-    if request.method == 'DELETE':
-        supplier = Supplier.objects.get(id=sup_id)
-        supplier.delete()
-        return HttpResponse(status=200)
-    return HttpResponse(status=405)
 
 
 @login_required
@@ -155,17 +128,6 @@ def manage_employee(request):
         context['all_employee'].append(info)
 
     return render(request, template_name='Manage/manage_employee.html', context=context)
-
-
-@login_required
-@csrf_exempt
-def delete_employee_api(request, emp_id):
-    if request.method == 'DELETE':
-        employee = Employee.objects.get(id=emp_id)
-        user = User.objects.get(id=employee.user_id)
-        user.delete()
-        return HttpResponse(status=200)
-    return HttpResponse(status=405)
 
 
 @login_required
@@ -223,16 +185,6 @@ def add_item(request):
 
 
 @login_required
-@csrf_exempt
-def delete_item_api(request, item_id):
-    if request.method == 'DELETE':
-        item = Item.objects.get(id=item_id)
-        item.delete()
-        return HttpResponse(status=200)
-    return HttpResponse(status=405)
-
-
-@login_required
 def manage_stock(request):
     context = {'all_stock': []}
     stocks = Stock.objects.all()
@@ -275,13 +227,3 @@ def add_stock(request):
         context['form'] = form
 
     return render(request, template_name='Add/add_stock.html', context={'form': form})
-
-
-@login_required
-@csrf_exempt
-def delete_stock_api(request, stock_id):
-    if request.method == 'DELETE':
-        stock = Stock.objects.get(id=stock_id)
-        stock.delete()
-        return HttpResponse(status=200)
-    return HttpResponse(status=405)

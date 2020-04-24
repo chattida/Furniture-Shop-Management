@@ -67,3 +67,11 @@ body {
   padding-bottom: 3% !important;
   background-color: #ff6601 !important;
 }
+
+.menu-button a {
+  color: #000000 !important;
+}
+
+.menu-button a:hover {
+  text-decoration: none !important;
+}

@@ -32,23 +32,10 @@
           <button class="btn btn-warning">
             <i class="fas fa-user-edit"></i> แก้ไขข้อมูล
           </button>
-          <button class="btn btn-danger" sup-id="{{ supplier.id }}" onclick='deleteSupplier(this)'>
-            <i class="fas fa-trash-alt"></i> ลบข้อมูล
-          </button>
         </td>
       </tr>
       {% endfor %}
     </tbody>
   </table>
 </div>
-<script>
-  function deleteSupplier(event) {
-    let id = event.getAttribute('sup-id')
-    axios.delete('/manage/supplier/api/delete/' + id + '/')
-      .then(function (response) {
-        let tr = event.parentElement.parentElement
-        tr.remove()
-      })
-  }
-</script>
 {% endblock content %}

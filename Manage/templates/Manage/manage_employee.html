@@ -34,23 +34,10 @@
           <button class="btn btn-warning">
             <i class="fas fa-user-edit"></i> แก้ไขข้อมูล
           </button>
-          <button class="btn btn-danger" emp-id="{{ employee.id }}" onclick='deleteEmployee(this)'>
-            <i class="fas fa-trash-alt"></i> ลบข้อมูล
-          </button>
         </td>
       </tr>
       {% endfor %}
     </tbody>
   </table>
 </div>
-<script>
-  function deleteEmployee(event) {
-    let id = event.getAttribute('emp-id')
-    axios.delete('/manage/employee/api/delete/' + id + '/')
-      .then(function (response) {
-        let tr = event.parentElement.parentElement
-        tr.remove()
-      })
-  }
-</script>
 {% endblock content %}

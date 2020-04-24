@@ -4,7 +4,7 @@
 <div class="row">
   {% if acc_type == 'Owner' or acc_type == 'Sale_Officer' %}
   <div class="col-3 my-3">
-    <a href="{% url 'view_stock' %}" class='text-dark'>
+    <a href="{% url 'view_stock' %}" class="text-dark text-decoration-none">
       <div class="card border-orange text-center py-1">
         <div class="card-body">
           <h1 class="icon-menu"><i class="fas fa-cubes"></i></h1>
@@ -13,8 +13,7 @@
       </div>
     </a>
   </div>
-  {% endif %}
-  {% if acc_type == 'Owner' or acc_type == 'Sale_Officer' %}
+  {% endif %} {% if acc_type == 'Owner' or acc_type == 'Sale_Officer' %}
   <div class="col-3 my-3">
     <div class="card border-orange text-center py-1">
       <div class="card-body">
@@ -23,20 +22,20 @@
       </div>
     </div>
   </div>
-  {% endif %}
-  {% if acc_type == 'Owner' or acc_type == 'Purchasing_Officer' %}
+  {% endif %} {% if acc_type == 'Owner' or acc_type == 'Purchasing_Officer' %}
   <div class="col-3 my-3">
-    <a href="{% url 'view_supplier' %}" class='text-dark'>
+    <a href="{% url 'view_supplier' %}" class="text-dark text-decoration-none">
       <div class="card border-orange text-center py-1">
         <div class="card-body">
           <h1 class="icon-menu"><i class="fas fa-industry"></i></h1>
-          <h5 class="my-3"><i class="fas fa-search"></i> ตรวจสอบข้อมูลผู้ผลิต</h5>
+          <h5 class="my-3">
+            <i class="fas fa-search"></i> ตรวจสอบข้อมูลผู้ผลิต
+          </h5>
         </div>
       </div>
     </a>
   </div>
-  {% endif %}
-  {% if acc_type == 'Owner' or acc_type == 'Sale_Officer' %}
+  {% endif %} {% if acc_type == 'Owner' or acc_type == 'Sale_Officer' %}
   <div class="col-3 my-3">
     <div class="card border-orange text-center py-1">
       <div class="card-body">
@@ -45,10 +44,9 @@
       </div>
     </div>
   </div>
-  {% endif %}
-  {% if acc_type == 'Owner' or acc_type == 'Purchasing_Officer' %}
+  {% endif %} {% if acc_type == 'Owner' or acc_type == 'Purchasing_Officer' %}
   <div class="col-3 my-3">
-    <a href="{% url 'manage_stock' %}" class='text-dark'>
+    <a href="{% url 'manage_stock' %}" class="text-dark text-decoration-none">
       <div class="card border-orange text-center py-1">
         <div class="card-body">
           <h1 class="icon-menu"><i class="fas fa-cubes"></i></h1>
@@ -57,10 +55,12 @@
       </div>
     </a>
   </div>
-  {% endif %}
-  {% if acc_type == 'Owner' or acc_type == 'Sale_Officer' %}
+  {% endif %} {% if acc_type == 'Owner' or acc_type == 'Sale_Officer' %}
   <div class="col-3 my-3">
-    <a href="{% url 'manage_customer' %}" class='text-dark'>
+    <a
+      href="{% url 'manage_customer' %}"
+      class="text-dark text-decoration-none"
+    >
       <div class="card border-orange text-center py-1">
         <div class="card-body">
           <h1 class="icon-menu"><i class="fas fa-user-friends"></i></h1>
@@ -69,10 +69,9 @@
       </div>
     </a>
   </div>
-  {% endif %}
-  {% if acc_type == 'Owner' or acc_type == 'Purchasing_Officer' %}
+  {% endif %} {% if acc_type == 'Owner' or acc_type == 'Purchasing_Officer' %}
   <div class="col-3 my-3">
-    <a href="{% url 'manage_item' %}" class='text-dark'>
+    <a href="{% url 'manage_item' %}" class="text-dark text-decoration-none">
       <div class="card border-orange text-center py-1">
         <div class="card-body">
           <h1 class="icon-menu"><i class="fas fa-file-alt"></i></h1>
@@ -81,10 +80,12 @@
       </div>
     </a>
   </div>
-  {% endif %}
-  {% if acc_type == 'Owner' or acc_type == 'Purchasing_Officer' %}
+  {% endif %} {% if acc_type == 'Owner' or acc_type == 'Purchasing_Officer' %}
   <div class="col-3 my-3">
-    <a href="{% url 'manage_supplier' %}" class='text-dark'>
+    <a
+      href="{% url 'manage_supplier' %}"
+      class="text-dark text-decoration-none"
+    >
       <div class="card border-orange text-center py-1">
         <div class="card-body">
           <h1 class="icon-menu"><i class="fas fa-industry"></i></h1>
@@ -93,10 +94,12 @@
       </div>
     </a>
   </div>
-  {% endif %}
-  {% if acc_type == 'Owner' %}
+  {% endif %} {% if acc_type == 'Owner' %}
   <div class="col-3 my-3">
-    <a href="{% url 'manage_employee' %}" class='text-dark'>
+    <a
+      href="{% url 'manage_employee' %}"
+      class="text-dark text-decoration-none"
+    >
       <div class="card border-orange text-center py-1">
         <div class="card-body">
           <h1 class="icon-menu"><i class="fas fa-users"></i></h1>
