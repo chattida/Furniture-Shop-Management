@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
 class Customer(models.Model):
     fname = models.CharField(max_length=255)
     lname = models.CharField(max_length=255)
@@ -14,7 +15,7 @@ class Supplier(models.Model):
     name = models.CharField(max_length=255)
     address = models.TextField()
     phone = models.CharField(max_length=10)
-    email = models.CharField(max_length=255, unique=True)
+    email = models.EmailField(max_length=255, unique=True)
     account_id = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
 
 

@@ -8,18 +8,18 @@ class supplierSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'address',
                   'phone', 'email', 'account_id']
         read_only_fields = ['id']
-        # extra_kwargs = {
-        #     'email': {'validators': []},
-        # }
+        extra_kwargs = {
+            # 'email': {'validators': []},
+            'name': {"error_messages": {"blank": "* กรุณากรอกชื่อบริษัท"}},
+            'address': {"error_messages": {"blank": "* กรุณากรอกที่อยู่"}},
+            'phone': {"error_messages": {"blank": "* กรุณากรอกเบอร์มือถือ"}},
+            'email': {"error_messages": {"blank": "* กรุณากรอกอีเมล", 'invalid': "* กรุณากรอกอีเมลให้ถูกต้อง"}},
+        }
 
     def validate_phone(self, value):
         if len(value) != 10:
-            raise serializers.ValidationError("phone error")
-        return value
-
-    def validate_email(self, value):
-        if '@' not in value or '.' not in value:
-            raise serializers.ValidationError("email error")
+            raise serializers.ValidationError(
+                "* กรุณากรอกเบอร์มือถือให้ถูกต้อง")
         return value
 
 

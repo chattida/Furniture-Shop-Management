@@ -10,8 +10,8 @@
     name="fname"
     required
   />
+  <p class="text-error" id="error_name"></p>
 </div>
-<p class="text-error" id="error_name"></p>
 <div class="form-group text-dark col-8 mx-auto mt-3">
   <label for="fname">อีเมล:</label>
   <input
@@ -38,8 +38,8 @@
 <div class="form-group text-dark col-8 mx-auto mt-3">
   <label for="fname">ที่อยู่:</label>
   <textarea id="address" class="form-control" rows="4"> </textarea>
+  <p class="text-error" id="error_address"></p>
 </div>
-<p class="text-error" id="error_address"></p>
 <div class="text-center">
   <button onclick="save()" class="btn btn-success">บันทึกข้อมูล</button>
   <button class="btn btn-danger">ลบข้อมูล</button>
@@ -84,7 +84,7 @@
         document.getElementById('error_phone').innerText = error.response.data.phone[0]
       }
       if (error.response.data.address){
-        document.getElementById('error_address').innerText = error.response.data.name[0]
+        document.getElementById('error_address').innerText = error.response.data.address[0]
       }
     })
   }

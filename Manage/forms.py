@@ -5,7 +5,6 @@ from Manage.models import Customer, Supplier, Item, Stock
 from Account.models import Account, Employee
 
 
-
 class addCustomerForm(forms.ModelForm):
     class Meta:
         model = Customer
@@ -20,14 +19,14 @@ class addCustomerForm(forms.ModelForm):
         labels = {
             'fname': 'ชื่อจริง',
             'lname': 'นามสกุล',
-            'email': 'อีเมล์',
+            'email': 'อีเมล',
             'phone': 'เบอร์มือถือ',
             'address': 'ที่อยู่',
         }
         error_messages = {
             'email': {
-                'invalid': ("กรุณากรอกอีเมล์ให้ถูกต้อง"),
-                'unique': ("อีเมลล์มีอยู่ในระบบแล้ว")
+                'invalid': ("กรุณากรอกอีเมลให้ถูกต้อง"),
+                'unique': ("อีเมลมีอยู่ในระบบแล้ว")
             }
         }
 
@@ -39,6 +38,7 @@ class addCustomerForm(forms.ModelForm):
                 code='invalid'
             )
         return data
+
 
 class addSupplierForm(forms.ModelForm):
     class Meta:
@@ -52,14 +52,14 @@ class addSupplierForm(forms.ModelForm):
         }
         labels = {
             'name': 'ชื่อบริษัท',
-            'email': 'อีเมล์',
+            'email': 'อีเมล',
             'phone': 'เบอร์มือถือ',
             'address': 'ที่อยู่',
         }
         error_messages = {
             'email': {
-                'invalid': ("กรุณากรอกอีเมล์ให้ถูกต้อง"),
-                'unique': ("อีเมลล์มีอยู่ในระบบแล้ว")
+                'invalid': ("กรุณากรอกอีเมลให้ถูกต้อง"),
+                'unique': ("อีเมลนี้มีอยู่ในระบบแล้ว")
             }
         }
 
@@ -76,7 +76,8 @@ class addSupplierForm(forms.ModelForm):
 class addItemForm(forms.ModelForm):
     class Meta:
         model = Item
-        fields = ('name', 'description', 'item_type', 'purchase_price', 'sale_price', 'supplier_id')
+        fields = ('name', 'description', 'item_type',
+                  'purchase_price', 'sale_price', 'supplier_id')
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control mt-0 mb-2'}),
             'description': forms.Textarea(attrs={'class': 'form-control mt-0 mb-2', 'rows': 4}),
