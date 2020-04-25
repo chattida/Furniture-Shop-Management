@@ -149,7 +149,7 @@ def manage_item(request):
             'item_type': item.item_type,
             'purchase_price': item.purchase_price,
             'sale_price': item.sale_price,
-            'supplier_id': item.supplier_id.id
+            'supplier_name': item.supplier_id.name
         }
         context['all_item'].append(info)
 

@@ -12,18 +12,22 @@
   <table class="table table-bordered">
     <thead>
       <tr>
-        <th scope="col">รหัสสินค้า</th>
-        <th scope="col">ชื่อสินค้า</th>
-        <th scope="col">รายละเอียดสินค้า</th>
-        <th scope="col">ประเภทสินค้า</th>
-        <th scope="col">ราคาซื้อ</th>
-        <th scope="col">ราคาขาย</th>
-        <th scope="col">รหัสผู้ผลิต</th>
-        <th scope="col">จัดการ</th>
+        <th scope="col" class="text-center">รหัสสินค้า</th>
+        <th scope="col" class="text-center" style="width: 15%;">ชื่อสินค้า</th>
+        <th scope="col" class="text-center" style="width: 25%;">
+          รายละเอียดสินค้า
+        </th>
+        <th scope="col" class="text-center" style="width: 10%;">
+          ประเภทสินค้า
+        </th>
+        <th scope="col" class="text-center">ราคาซื้อ</th>
+        <th scope="col" class="text-center">ราคาขาย</th>
+        <th scope="col" class="text-center">ชื่อผู้ผลิต</th>
+        <th scope="col" class="text-center">จัดการ</th>
       </tr>
     </thead>
     <tbody>
-      {% for item in all_item%}
+      {% for item in all_item %}
       <tr>
         <th scope="row">{{ item.id }}</th>
         <td>{{ item.name }}</td>
@@ -31,7 +35,7 @@
         <td>{{ item.item_type }}</td>
         <td>{{ item.purchase_price }}</td>
         <td>{{ item.sale_price }}</td>
-        <td>{{ item.supplier_id }}</td>
+        <td>{{ item.supplier_name }}</td>
         <td>
           <button class="btn btn-warning">
             <i class="fas fa-user-edit"></i> แก้ไขข้อมูล
