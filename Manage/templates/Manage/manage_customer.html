@@ -10,30 +10,31 @@
 <hr class="mt-2 mb-3 hr-orange" />
 <div class="table-responsive">
   <table class="table table-bordered">
-    <thead>
+    <thead class="thead-dark text-center">
       <tr>
-        <th scope="col">รหัสลูกค้า</th>
-        <th scope="col">ชื่อจริง</th>
-        <th scope="col">นามสกุล</th>
-        <th scope="col">เบอร์ติดต่อ</th>
-        <th scope="col">อีเมล์</th>
-        <th scope="col">ที่อยู่</th>
-        <th scope="col">จัดการ</th>
+        <th scope="col" style="width: 10%;">รหัสลูกค้า</th>
+        <th scope="col" style="width: 20%;">ชื่อจริง - นามสกุล</th>
+        <th scope="col" style="width: 30%;">เบอร์ติดต่อ</th>
+        <th scope="col" style="width: 10%;">อีเมล</th>
+        <th scope="col" style="width: 20%;">ที่อยู่</th>
+        <th scope="col" style="width: 10%;">จัดการ</th>
       </tr>
     </thead>
     <tbody>
       {% for customer in all_customer%}
       <tr>
         <th scope="row">{{ customer.id }}</th>
-        <td>{{ customer.fname }}</td>
-        <td>{{ customer.lname }}</td>
+        <td>{{ customer.fname }} {{ customer.lname }}</td>
         <td>{{ customer.phone }}</td>
         <td>{{ customer.email }}</td>
         <td>{{ customer.address }}</td>
         <td>
-          <button class="btn btn-warning">
+          <a
+            href="{% url 'edit_customer' customer.id %}"
+            class="btn btn-warning"
+          >
             <i class="fas fa-user-edit"></i> แก้ไขข้อมูล
-          </button>
+          </a>
         </td>
       </tr>
       {% endfor %}

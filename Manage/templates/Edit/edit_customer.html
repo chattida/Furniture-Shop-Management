@@ -1,11 +1,16 @@
 {% extends "base.html" %} {% block content %}
-<h5 class="mt-4"><i class="fas fa-edit"></i> แก้ไขข้อมูลผู้ผลิต</h5>
+<h5 class="mt-4"><i class="fas fa-edit"></i> แก้ไขข้อมูลลูกค้า</h5>
 <hr class="my-3 hr-orange" />
 <div class="form-group text-dark col-8 mx-auto mt-3">
-  <label for="fname">ชื่อบริษัท:</label>
-  <input type="text" id="name" class="form-control mt-0 mb-2" name="fname" />
+  <label for="fname">ชื่อจริง:</label>
+  <input type="text" id="fname" class="form-control mt-0 mb-2" name="fname" />
   <p class="text-error" id="error_name"></p>
 </div>
+<div class="form-group text-dark col-8 mx-auto mt-3">
+    <label for="fname">นามสกุล:</label>
+    <input type="text" id="lname" class="form-control mt-0 mb-2" name="fname" />
+    <p class="text-error" id="error_name"></p>
+  </div>
 <div class="form-group text-dark col-8 mx-auto mt-3">
   <label for="fname">อีเมล:</label>
   <input type="text" id="email" class="form-control mt-0 mb-2" name="fname" />
@@ -99,12 +104,13 @@
         initialize();
       };
 
-      let supplier_id = {{ id }};
+      let customer_id = {{ id }};
       let user_id = {{ user.id }}
 
       function initialize() {
-        axios.get("/api/supplier/", {params:{id: supplier_id}}).then((response) => {
-          document.getElementById('name').value = response.data[0].name
+        axios.get("/api/customer/", {params:{id: customer_id}}).then((response) => {
+          document.getElementById('fname').value = response.data[0].fname
+          document.getElementById('lname').value = response.data[0].lname
           document.getElementById('email').value = response.data[0].email
           document.getElementById('phone').value = response.data[0].phone
           document.getElementById('address').value = response.data[0].address
@@ -112,18 +118,22 @@
       }
 
       function save() {
-        axios.put("/api/supplier/", {
-          id: supplier_id,
-          name: document.getElementById('name').value,
+        axios.put("/api/customer/", {
+          id: customer_id,
+          fname: document.getElementById('fname').value,
+          lname: document.getElementById('lname').value,
           email: document.getElementById('email').value,
           phone: document.getElementById('phone').value,
           address: document.getElementById('address').value,
           account_id: user_id
         }).then((response) => {
-          window.location.href = "/manage/supplier/";
+          window.location.href = "/manage/customer/";
         }).catch((error) => {
           if (error.response.data.name){
-            document.getElementById('error_name').innerText = error.response.data.name[0]
+            document.getElementById('error_fname').innerText = error.response.data.fname[0]
+          }
+          if (error.response.data.name){
+            document.getElementById('error_lname').innerText = error.response.data.lname[0]
           }
           if (error.response.data.email){
             document.getElementById('error_email').innerText = error.response.data.email[0]
@@ -138,8 +148,8 @@
       }
 
       function delete_data() {
-        axios.delete("/api/supplier/", { data: { id: supplier_id } }).then((response) => {
-          window.location.href = "/manage/supplier/";
+        axios.delete("/api/customer/", { data: { id: customer_id } }).then((response) => {
+          window.location.href = "/manage/customer/";
         })
       }
     </script>
