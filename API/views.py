@@ -100,6 +100,20 @@ class api_employee(APIView):
 class api_customer(APIView):
     permission_classes = [IsAuthenticated]
 
+    def get(self, request):
+        # get parameter id
+        try:
+            id = request.query_params['id']
+        except:
+            id = False
+
+        if id:
+            items = Supplier.objects.filter(pk=id)
+        else:
+            items = Supplier.objects.all()
+        serializer = supplierSerializer(items, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
     def put(self, request):
         data = json.loads(request.body)
         instance = Customer.objects.get(pk=data.get('id'))
