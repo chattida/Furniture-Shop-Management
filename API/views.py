@@ -108,10 +108,10 @@ class api_customer(APIView):
             id = False
 
         if id:
-            items = Supplier.objects.filter(pk=id)
+            items = Customer.objects.filter(pk=id)
         else:
-            items = Supplier.objects.all()
-        serializer = supplierSerializer(items, many=True)
+            items = Customer.objects.all()
+        serializer = customerSerializer(items, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def put(self, request):
