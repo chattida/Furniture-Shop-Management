@@ -5,7 +5,11 @@
   <div class="col-8">
     <div class="form-inline">
       <label for="show_item">แสดง</label>
-      <select class="form-control mx-1" id="show_item" onchange="item_list()">
+      <select
+        class="form-control mx-1"
+        id="show_item"
+        onchange="item_display()"
+      >
         <option value="5" selected>5</option>
         <option value="10">10</option>
         <option value="25">25</option>
@@ -49,7 +53,7 @@
 
 <div class="row">
   <div class="col-6">
-    <span id="item_display"></span>
+    <span id="item_text"></span>
   </div>
   <div class="col-6">
     <div class="form-inline float-right">
@@ -122,17 +126,23 @@
       }
     }
 
-    item_display();
+    item_text();
   }
 
   function item_display() {
+    current_page = 1;
+    document.getElementById("current_page").value = current_page;
+    item_list();
+  }
+
+  function item_text() {
     if (total_item >= show_item) {
       total_page = Math.ceil(total_item / show_item);
     } else {
       total_page = 1;
     }
 
-    display = document.getElementById("item_display");
+    display = document.getElementById("item_text");
     let start = show_item * (current_page - 1) + 1;
     let stop = show_item * current_page;
     if (stop > total_item) {
