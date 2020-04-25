@@ -30,11 +30,26 @@ class api_supplier(APIView):
         except:
             id = False
 
+        # get parameter sort
+        try:
+            sort = request.query_params['sort']
+            data = request.query_params['data']
+            search_data = request.query_params['search_data']
+        except:
+            sort = False
+
         if search:
             items = Supplier.objects.filter(Q(name__icontains=search) | Q(
                 address__icontains=search) | Q(phone__icontains=search) | Q(email__icontains=search))
         elif id:
             items = Supplier.objects.filter(pk=id)
+        elif sort:
+            if (sort == "asc"):
+                items = Supplier.objects.filter(Q(name__icontains=search_data) | Q(
+                    address__icontains=search_data) | Q(phone__icontains=search_data) | Q(email__icontains=search_data)).order_by(data)
+            elif (sort == "desc"):
+                items = Supplier.objects.filter(Q(name__icontains=search_data) | Q(
+                    address__icontains=search_data) | Q(phone__icontains=search_data) | Q(email__icontains=search_data)).order_by('-' + data)
         else:
             items = Supplier.objects.all()
         serializer = supplierSerializer(items, many=True)
