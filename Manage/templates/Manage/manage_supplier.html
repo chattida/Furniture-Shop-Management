@@ -12,12 +12,12 @@
   <table class="table table-bordered">
     <thead class="thead-dark text-center">
       <tr>
-        <th scope="col">รหัสผู้ผลิต</th>
-        <th scope="col">ชื่อบริษัท</th>
-        <th scope="col">ที่อยู่</th>
-        <th scope="col">เบอร์ติดต่อ</th>
-        <th scope="col">อีเมล</th>
-        <th scope="col">จัดการ</th>
+        <th scope="col" style="width: 10%;">รหัสผู้ผลิต</th>
+        <th scope="col" style="width: 20%;">ชื่อบริษัท</th>
+        <th scope="col" style="width: 30%;">ที่อยู่</th>
+        <th scope="col" style="width: 10%;">เบอร์ติดต่อ</th>
+        <th scope="col" style="width: 20%;">อีเมล</th>
+        <th scope="col" style="width: 10%;">จัดการ</th>
       </tr>
     </thead>
     <tbody>
@@ -29,9 +29,12 @@
         <td>{{ supplier.phone }}</td>
         <td>{{ supplier.email }}</td>
         <td>
-          <button class="btn btn-warning">
+          <a
+            href="{% url 'edit_supplier' supplier.id %}"
+            class="btn btn-warning"
+          >
             <i class="fas fa-user-edit"></i> แก้ไขข้อมูล
-          </button>
+          </a>
         </td>
       </tr>
       {% endfor %}
