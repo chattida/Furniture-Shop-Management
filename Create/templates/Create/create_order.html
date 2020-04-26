@@ -145,6 +145,7 @@
     </tbody>
   </table>
 </div>
+<button class="btn btn-orange p-3 my-4">สร้างรายการสั่งซื้อ</button>
 
 <script>
   let timer;
@@ -378,20 +379,48 @@
           <td>${item_data['item_id'].name}</td>
           <td>${item_data['item_id'].description}</td>
           <td>${item_data['color']}</td>
-          <td><input type="number" value='1' id='value-item-${now}'></td>
+          <td><input type="number" value='1' min="1" max="${item_data['amount']}" id='value-item-${now}'></td>
           <td>${item_data['item_id'].sale_price}</td>
           <td>${item_data['item_id'].sale_price}</td>
           <td><button class="btn btn-danger" onclick="delete_item(${now})"><i class="fas fa-minus-square"></i></button></td>
           `
         order_table.append(new_item);
+        document.getElementById("total_all").remove();
+        let total_price_order = document.createElement("tr");
+        total_price_order.setAttribute("id", "total_all");
+        let total_price = 0;
+        for (let i=1; i<=order_table.childElementCount; i++) {
+          let list_price = document.querySelector(`#item-${i} > td:nth-child(7)`).innerHTML;
+          total_price += parseInt(list_price)
+        }
+        total_price_order.innerHTML = `
+          <th colspan="6" scope="col" style="width: 10%;" class="pl-4">รวมทั้งหมด</th>
+          <th colspan="2" scope="col" style="width: 5%;" class="pr-4 text-right">${total_price} บาท</th>
+        `;
+        order_table.append(total_price_order);
 
         //Add Total list price Event
         add_e = document.getElementById(`value-item-${now}`);
         add_e.addEventListener("keyup", () => {
           if (document.getElementById(`value-item-${now}`).value <= 0) {
             document.getElementById(`value-item-${now}`).value = 1;
+          } else if (document.getElementById(`value-item-${now}`).value > item_data['amount']) {
+            document.getElementById(`value-item-${now}`).value = item_data['amount'];
           }
           document.querySelector(`#item-${now} > td:nth-child(7)`).innerText = (price*document.getElementById(`value-item-${now}`).value).toFixed(2);
+          document.getElementById("total_all").remove();
+          let total_price_order = document.createElement("tr");
+          total_price_order.setAttribute("id", "total_all");
+          let total_price = 0;
+          for (let i=1; i<=order_table.childElementCount; i++) {
+            let list_price = document.querySelector(`#item-${i} > td:nth-child(7)`).innerHTML;
+            total_price += parseInt(list_price)
+          }
+          total_price_order.innerHTML = `
+            <th colspan="6" scope="col" style="width: 10%;" class="pl-4">รวมทั้งหมด</th>
+            <th colspan="2" scope="col" style="width: 5%;" class="pr-4 text-right">${total_price} บาท</th>
+          `;
+          order_table.append(total_price_order);
         });
         list_item_select.push(item_data['id']);
         item_list();
