@@ -221,16 +221,16 @@ class api_item(APIView):
 
         if search:
             items = Item.objects.filter(Q(name__icontains=search) | Q(description__icontains=search) | Q(item_type__icontains=search) | 
-            Q(purchase_price__icontains=search) | Q(sale_price__icontains=search))
+            Q(purchase_price__icontains=search) | Q(sale_price__icontains=search) | Q(supplier_id__name__icontains=search))
         elif id:
             items = Item.objects.filter(pk=id)
         elif sort:
             if (sort == "asc"):
                 items = Item.objects.filter(Q(name__icontains=search_data) | Q(description__icontains=search_data) | Q(item_type__icontains=search_data) | 
-            Q(purchase_price__icontains=search_data) | Q(sale_price__icontains=search_data)).order_by(data)
+            Q(purchase_price__icontains=search_data) | Q(sale_price__icontains=search_data) | Q(supplier_id__name__icontains=search_data)).order_by(data)
             elif (sort == "desc"):
                 items = Item.objects.filter(Q(name__icontains=search_data) | Q(description__icontains=search_data) | Q(item_type__icontains=search_data) | 
-            Q(purchase_price__icontains=search_data) | Q(sale_price__icontains=search_data)).order_by('-' + data)
+            Q(purchase_price__icontains=search_data) | Q(sale_price__icontains=search_data) | Q(supplier_id__name__icontains=search_data)).order_by('-' + data)
         else:
             items = Item.objects.all()
         serializer = itemSerializer(items, many=True)
