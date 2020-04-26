@@ -13,9 +13,9 @@ class Owner(models.Model):
 
 class Employee(models.Model):
     EMPLOYEE_TYPE_CHOICES = [
-        ('PO', 'PURCHASING_OFFICER'),
-        ('SO', 'SALE_OFFICER')
+        ('PURCHASING_OFFICER', 'PURCHASING_OFFICER'),
+        ('SALE_OFFICER', 'SALE_OFFICER')
     ]
-    department = models.CharField(max_length=2, choices=EMPLOYEE_TYPE_CHOICES, null=False)
+    department = models.CharField(max_length=18, choices=EMPLOYEE_TYPE_CHOICES, null=False)
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
     owner_id = models.ForeignKey(Owner, on_delete=models.CASCADE)

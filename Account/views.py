@@ -161,8 +161,6 @@ def register(request):
             owner_id=Owner.objects.get(account_id=Account.objects.get(user_id=request.user.id))
         )
 
-        print(employee)
-
         if acc_type == 'po':
             try:
                 Group.objects.get(name='Purchasing_Officer')
@@ -171,7 +169,7 @@ def register(request):
                 # l_po = []
                 # g_po.permissions.set(l_po)
 
-            employee.department = 'PO'
+            employee.department = 'PURCHASING_OFFICER'
             user.groups.add(Group.objects.get(name='Purchasing_Officer'))
 
         elif acc_type == 'so':
@@ -182,7 +180,7 @@ def register(request):
                 # l_so = []
                 # g_so.permissions.set(l_so)
 
-            employee.department = 'SO'
+            employee.department = 'SALE_OFFICER'
             user.groups.add(Group.objects.get(name='Sale_Officer'))
         employee.save()
 
