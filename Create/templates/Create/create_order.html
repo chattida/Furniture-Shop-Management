@@ -18,7 +18,8 @@
       />
     </div>
   </div>
-  <div class="col-7" id="detail_cus">
+  <div class="col-7 bg-dark text-light p-4 border rounded" id="detail_cus">
+    <p>รหัสลูกค้า: </p>
     <p>ชื่อลูกค้า: </p>
     <p>อีเมล: </p>
     <p>เบอร์โทรศัพท์: </p>
@@ -127,15 +128,21 @@
     <thead class="text-center">
       <tr>
         <th scope="col" style="width: 10%;">รายการ</th>
-        <th scope="col" style="width: 20%;">ชื่อสินค้า</th>
-        <th scope="col" style="width: 35%;">รายละเอียดสินค้า</th>
+        <th scope="col" style="width: 15%;">ชื่อสินค้า</th>
+        <th scope="col" style="width: 20%;">รายละเอียดสินค้า</th>
         <th scope="col" style="width: 10%;">สี</th>
         <th scope="col" style="width: 10%;">จำนวน</th>
-        <th scope="col" style="width: 10%;">ราคา</th>
+        <th scope="col" style="width: 10%;">ราคาต่อชิ้น</th>
+        <th scope="col" style="width: 10%;">ราคารวม</th>
         <th scope="col" style="width: 5%;">ลบ</th>
       </tr>
     </thead>
-    <tbody id="order_list"></tbody>
+    <tbody id="order_list">
+      <tr id="total_all">
+        <th colspan="6" scope="col" style="width: 10%;" class="pl-4">รวมทั้งหมด</th>
+        <th colspan="2" scope="col" style="width: 5%;" class="pr-4 text-right">0 บาท</th>
+      </tr>
+    </tbody>
   </table>
 </div>
 
@@ -149,6 +156,7 @@
   let total_item;
 
   let count = 0;
+  let list_item_select = []
 
   let sort_status = {
     id: null,
@@ -188,7 +196,7 @@
     let stop = show_item * current_page;
 
     for (let i = start; i < stop; i++) {
-      if (data[i]) {
+      if (data[i] && list_item_select.indexOf(data[i].id) < 0) {
         let stock = data[i];
         let head = document.createElement("tr");
         head.innerHTML = `
@@ -325,15 +333,15 @@
         },
       })
       .then(function (response) {
-        data = response.data;
+        send_cus = response.data;
         show_cus();
       });
   }
 
   function show_cus() {
     let detail_cus= document.getElementById("detail_cus");
-    if (data[0]) {
-        let cus_data = data[0];
+    if (send_cus[0]) {
+        let cus_data = send_cus[0];
         detail_cus.innerHTML = `
             <p>รหัสลูกค้า: ${cus_data['id']}</p>
             <p>ชื่อลูกค้า: ${cus_data['fname']} ${cus_data['lname']}</p>
@@ -352,26 +360,41 @@
         },
       })
       .then(function (response) {
-        data = response.data;
+        send_item = response.data;
         add_item();
       });
   }
 
   function add_item() {
     let order_table = document.getElementById("order_list");
-    if (data[0]) {
-        let item_data = data[0];
+    if (send_item[0]) {
+        let item_data = send_item[0];
         let new_item = document.createElement("tr");
+        let now = ++count;
+        let price = item_data['item_id'].sale_price
+        new_item.setAttribute("id", `item-${now}`)
         new_item.innerHTML = `
-            <td>${++count}</td>
-            <td>${item_data['item_id'].name}</td>
-            <td>${item_data['item_id'].description}</td>
-            <td>${item_data['color']}</td>
-            <td><input type="number" value='1'></td>
-            <td>${item_data['item_id'].sale_price}</td>
-            <td><button class="btn btn-danger" onclick="delete_item(${count})"><i class="fas fa-minus-square"></i></button></td>
-            `
+          <td>${now}</td>
+          <td>${item_data['item_id'].name}</td>
+          <td>${item_data['item_id'].description}</td>
+          <td>${item_data['color']}</td>
+          <td><input type="number" value='1' id='value-item-${now}'></td>
+          <td>${item_data['item_id'].sale_price}</td>
+          <td>${item_data['item_id'].sale_price}</td>
+          <td><button class="btn btn-danger" onclick="delete_item(${now})"><i class="fas fa-minus-square"></i></button></td>
+          `
         order_table.append(new_item);
+
+        //Add Total list price Event
+        add_e = document.getElementById(`value-item-${now}`);
+        add_e.addEventListener("keyup", () => {
+          if (document.getElementById(`value-item-${now}`).value <= 0) {
+            document.getElementById(`value-item-${now}`).value = 1;
+          }
+          document.querySelector(`#item-${now} > td:nth-child(7)`).innerText = (price*document.getElementById(`value-item-${now}`).value).toFixed(2);
+        });
+        list_item_select.push(item_data['id']);
+        item_list();
     }
   }
 </script>
