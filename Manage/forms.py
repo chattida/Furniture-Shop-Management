@@ -104,16 +104,16 @@ class addItemForm(forms.ModelForm):
 class addStockForm(forms.ModelForm):
     class Meta:
         model = Stock
-        fields = ('color', 'amount', 'item_id')
+        fields = ('item_id', 'color', 'amount')
         widgets = {
+            'item_id': forms.TextInput(attrs={'class': 'form-control mt-0 mb-2'}),
             'color': forms.TextInput(attrs={'class': 'form-control mt-0 mb-2'}),
             'amount': forms.TextInput(attrs={'class': 'form-control mt-0 mb-2'}),
-            'item_id': forms.TextInput(attrs={'class': 'form-control mt-0 mb-2'})
         }
         labels = {
+            'item_id': 'ชื่อสินค้า',
             'color': 'สี',
             'amount': 'จำนวนสินค้าในสต็อก',
-            'item_id': 'ชื่อสินค้า'
         }
         error_messages = {
             'item_id': {

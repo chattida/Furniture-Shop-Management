@@ -221,9 +221,9 @@ def add_stock(request):
         form = addStockForm(request.POST)
         if form.is_valid():
             stock = Stock.objects.create(
+                item_id=item,
                 color=color,
-                amount=amount,
-                item_id=item
+                amount=amount
             )
             return redirect('manage_stock')
         else:
