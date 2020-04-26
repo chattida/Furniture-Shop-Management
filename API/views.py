@@ -223,7 +223,15 @@ class api_customer(APIView):
         except:
             sort = False
 
-        if search:
+        # get parameter order
+        try:
+            get_data = request.query_params['get_data']
+        except:
+            get_data = False
+
+        if get_data:
+            items =  Customer.objects.filter(id=get_data)
+        elif search:
             items = Customer.objects.filter(Q(fname__icontains=search) | Q(lname__icontains=search) | Q(email__icontains=search) | 
             Q(phone__icontains=search) | Q(address__icontains=search))
         elif id:

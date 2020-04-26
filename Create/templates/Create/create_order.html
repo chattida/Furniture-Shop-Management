@@ -18,7 +18,7 @@
       />
     </div>
   </div>
-  <div class="col-7">
+  <div class="col-7" id="detail_cus">
     <p>ชื่อลูกค้า: </p>
     <p>อีเมล: </p>
     <p>เบอร์โทรศัพท์: </p>
@@ -165,6 +165,11 @@
       delay_search(search_box.value, 100);
     });
 
+    let search_cus = document.getElementById("search_cus");
+    search_cus.addEventListener("keyup", () => {
+      delay_search_cus(search_cus.value, 100);
+    });
+
     axios.get("/api/stock/").then(function (response) {
       data = response.data;
       total_item = data.length;
@@ -305,6 +310,40 @@
     document.getElementById("current_page").value = current_page;
   }
 
+  function delay_search_cus(value, ms) {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      get_cus(value);
+    }, ms);
+  }
+
+  function get_cus(value) {
+    axios
+      .get("/api/customer/", {
+        params: {
+          get_data: value
+        },
+      })
+      .then(function (response) {
+        data = response.data;
+        show_cus();
+      });
+  }
+
+  function show_cus() {
+    let detail_cus= document.getElementById("detail_cus");
+    if (data[0]) {
+        let cus_data = data[0];
+        detail_cus.innerHTML = `
+            <p>รหัสลูกค้า: ${cus_data['id']}</p>
+            <p>ชื่อลูกค้า: ${cus_data['fname']} ${cus_data['lname']}</p>
+            <p>อีเมล: ${cus_data['email']}</p>
+            <p>เบอร์โทรศัพท์: ${cus_data['phone']}</p>
+            <p>ที่อยู่: ${cus_data['address']}</p>
+            `
+    }
+  }
+
   function get_item(id) {
     axios
       .get("/api/stock/", {
@@ -330,7 +369,7 @@
             <td>${item_data['color']}</td>
             <td><input type="number" value='1'></td>
             <td>${item_data['item_id'].sale_price}</td>
-            <td><button class="btn btn-danger" onclick="deleteItem(${count})"><i class="fas fa-minus-square"></i></button></td>
+            <td><button class="btn btn-danger" onclick="delete_item(${count})"><i class="fas fa-minus-square"></i></button></td>
             `
         order_table.append(new_item);
     }
