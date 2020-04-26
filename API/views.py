@@ -141,14 +141,38 @@ class api_customer(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
+        # get parameter search
+        try:
+            search = request.query_params['search']
+        except:
+            search = False
+
         # get parameter id
         try:
             id = request.query_params['id']
         except:
             id = False
 
-        if id:
+        # get parameter sort
+        try:
+            sort = request.query_params['sort']
+            data = request.query_params['data']
+            search_data = request.query_params['search_data']
+        except:
+            sort = False
+
+        if search:
+            items = Customer.objects.filter(Q(fname__icontains=search) | Q(lname__icontains=search) | Q(email__icontains=search) | 
+            Q(phone__icontains=search) | Q(address__icontains=search))
+        elif id:
             items = Customer.objects.filter(pk=id)
+        elif sort:
+            if (sort == "asc"):
+                items = Customer.objects.filter(Q(fname__icontains=search_data) | Q(lname__icontains=search_data) | Q(email__icontains=search_data) | 
+            Q(phone__icontains=search_data) | Q(address__icontains=search_data)).order_by(data)
+            elif (sort == "desc"):
+                items = Customer.objects.filter(Q(fname__icontains=search_data) | Q(lname__icontains=search_data) | Q(email__icontains=search_data) | 
+            Q(phone__icontains=search_data) | Q(address__icontains=search_data)).order_by('-' + data)
         else:
             items = Customer.objects.all()
         serializer = customerSerializer(items, many=True)
