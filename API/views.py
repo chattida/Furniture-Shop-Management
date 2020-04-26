@@ -82,6 +82,15 @@ class api_stock(APIView):
         # get parameter search
         try:
             search = request.query_params['search']
+            if not search:
+                search = " "
+            # get parameter del_list
+            try:
+                del_list = request.query_params['del_list']
+                del_list = del_list.split(",")
+                del_list = list(map(int, del_list))
+            except:
+                del_list = []
         except:
             search = False
 
@@ -109,7 +118,7 @@ class api_stock(APIView):
             items = Stock.objects.filter(id=get_data)
         elif search:
             items = Stock.objects.filter(Q(color__icontains=search) | Q(amount__icontains=search) | Q(item_id__name__icontains=search) |
-                                         Q(item_id__description__icontains=search) | Q(item_id__item_type__icontains=search) | Q(item_id__sale_price__icontains=search))
+                                         Q(item_id__description__icontains=search) | Q(item_id__item_type__icontains=search) | Q(item_id__sale_price__icontains=search)).exclude(id__in=del_list)
         elif id:
             items = Stock.objects.filter(pk=id)
         elif sort:
@@ -140,6 +149,7 @@ class api_stock(APIView):
         stock = Stock.objects.get(pk=data.get('id'))
         stock.delete()
         return Response(status=status.HTTP_200_OK)
+
 
 
 class api_employee(APIView):
