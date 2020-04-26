@@ -7,8 +7,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from API.serializers import supplierSerializer, customerSerializer, itemSerializer, stockSerializer
-from Manage.models import Stock, Supplier, Customer, Item, Stock
+from API.serializers import employeeSerializer, supplierSerializer, customerSerializer, itemSerializer, stockSerializer
+from Manage.models import Supplier, Customer, Item, Stock
 from Account.models import Employee
 
 # Create your views here.
@@ -132,6 +132,57 @@ class api_stock(APIView):
 
 class api_employee(APIView):
     permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        # get parameter search
+        try:
+            search = request.query_params['search']
+        except:
+            search = False
+
+        # get parameter id
+        try:
+            id = request.query_params['id']
+        except:
+            id = False
+
+        # get parameter sort
+        try:
+            sort = request.query_params['sort']
+            data = request.query_params['data']
+            search_data = request.query_params['search_data']
+        except:
+            sort = False
+
+        if search:
+            items = Employee.objects.filter(Q(account__user__first_name__icontains=search) | 
+            Q(account__user__last_name__icontains=search) | Q(account__user__email__icontains=search) | 
+            Q(account__phone__icontains=search) | Q(department__icontains=search))
+        elif id:
+            items = Employee.objects.filter(pk=id)
+        elif sort:
+            if (sort == "asc"):
+                items = Employee.objects.filter(Q(account__user__first_name__icontains=search_data) | 
+            Q(account__user__last_name__icontains=search_data) | Q(account__user__email__icontains=search_data) | 
+            Q(account__phone__icontains=search_data) | Q(department__icontains=search_data)).order_by(data)
+            elif (sort == "desc"):
+                items = Employee.objects.filter(Q(account__user__first_name__icontains=search_data) | 
+            Q(account__user__last_name__icontains=search_data) | Q(account__user__email__icontains=search_data) | 
+            Q(account__phone__icontains=search_data) | Q(department__icontains=search_data)).order_by('-' + data)
+        else:
+            items = Employee.objects.all()
+        serializer = employeeSerializer(items, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def put(self, request):
+        data = json.loads(request.body)
+        instance = Employee.objects.get(pk=data.get('id'))
+        serializer = employeeSerializer(
+            data=data, instance=instance, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request):
         data = json.loads(request.body)

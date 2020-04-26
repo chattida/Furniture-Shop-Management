@@ -9,10 +9,10 @@ def index(request):
     context = {}
     user = request.user
     try:
-        owner = Owner.objects.get(user_id=user.id)
+        owner = Owner.objects.get(account_id=Account.objects.get(user_id=user.id))
         context['acc_type'] = 'Owner'
     except:
-        employee = Employee.objects.get(user_id=user.id).department
+        employee = Employee.objects.get(account_id=Account.objects.get(user_id=user.id)).department
         if employee == 'PO':
             context['acc_type'] = 'Purchasing_Officer'
         elif employee == 'SO':

@@ -122,8 +122,8 @@ def manage_employee(request):
     context = {'all_employee': []}
     employees = Employee.objects.all()
     for employee in employees:
-        user = User.objects.get(id=employee.user_id)
-        account = Account.objects.get(user_id=employee.user_id)
+        account = Account.objects.get(id=employee.account_id)
+        user = User.objects.get(id=account.user_id)
         info = {
             'id': employee.id,
             'fname': user.first_name,

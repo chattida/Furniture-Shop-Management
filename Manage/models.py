@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from Account.models import Account
 
 
 class Customer(models.Model):
@@ -8,7 +8,7 @@ class Customer(models.Model):
     email = models.EmailField(max_length=255, unique=True)
     phone = models.CharField(max_length=10)
     address = models.TextField()
-    account_id = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    account_id = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True)
 
 
 class Supplier(models.Model):
@@ -16,7 +16,7 @@ class Supplier(models.Model):
     address = models.TextField()
     phone = models.CharField(max_length=10)
     email = models.EmailField(max_length=255, unique=True)
-    account_id = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    account_id = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True)
 
 
 class Item(models.Model):
@@ -37,7 +37,7 @@ class Stock(models.Model):
 class Order(models.Model):
     total_price = models.DecimalField(max_digits=8, decimal_places=2)
     create_date = models.DateTimeField(auto_now=True)
-    account_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    account_id = models.ForeignKey(Account, on_delete=models.CASCADE)
     cus_id = models.ForeignKey(Customer, on_delete=models.CASCADE)
 
 

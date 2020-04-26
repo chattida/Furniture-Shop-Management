@@ -8,7 +8,7 @@ class Account(models.Model):
 
 class Owner(models.Model):
     shop_name = models.CharField(max_length=255)
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    account = models.OneToOneField(Account, on_delete=models.CASCADE)
 
 
 class Employee(models.Model):
@@ -17,5 +17,5 @@ class Employee(models.Model):
         ('SO', 'SALE_OFFICER')
     ]
     department = models.CharField(max_length=2, choices=EMPLOYEE_TYPE_CHOICES, null=False)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    account = models.ForeignKey(Account, on_delete=models.CASCADE)
     owner_id = models.ForeignKey(Owner, on_delete=models.CASCADE)

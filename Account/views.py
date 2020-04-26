@@ -93,7 +93,7 @@ def let_start(request):
             g_o.permissions.set(l_o)
 
         owner = Owner(
-            user=User.objects.get(username=username),
+            account=Account.objects.get(user_id=User.objects.get(username=username)),
             shop_name=request.POST.get('shop_name')
         )
         owner.save()
@@ -157,9 +157,11 @@ def register(request):
         account.save()
 
         employee = Employee(
-            user=User.objects.get(username=username),
-            owner_id=Owner.objects.get(user_id=request.user.id)
+            account=Account.objects.get(user_id=User.objects.get(username=username)),
+            owner_id=Owner.objects.get(account_id=Account.objects.get(user_id=request.user.id))
         )
+
+        print(employee)
 
         if acc_type == 'po':
             try:
