@@ -1,4 +1,5 @@
 import json
+from builtins import object
 
 from django.db.models import Q
 from django.shortcuts import render
@@ -7,9 +8,11 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from API.serializers import employeeSerializer, supplierSerializer, customerSerializer, itemSerializer, stockSerializer
-from Manage.models import Supplier, Customer, Item, Stock
 from Account.models import Employee
+from API.serializers import (customerSerializer, employeeSerializer,
+                             itemSerializer, stockSerializer,
+                             supplierSerializer)
+from Manage.models import Customer, Item, Stock, Supplier
 
 # Create your views here.
 
@@ -103,19 +106,19 @@ class api_stock(APIView):
             get_data = False
 
         if get_data:
-            items =  Stock.objects.filter(id=get_data)
+            items = Stock.objects.filter(id=get_data)
         elif search:
-            items = Stock.objects.filter(Q(color__icontains=search) | Q(amount__icontains=search) | Q(item_id__name__icontains=search) | 
-            Q(item_id__description__icontains=search) | Q(item_id__item_type__icontains=search) | Q(item_id__sale_price__icontains=search))
+            items = Stock.objects.filter(Q(color__icontains=search) | Q(amount__icontains=search) | Q(item_id__name__icontains=search) |
+                                         Q(item_id__description__icontains=search) | Q(item_id__item_type__icontains=search) | Q(item_id__sale_price__icontains=search))
         elif id:
             items = Stock.objects.filter(pk=id)
         elif sort:
             if (sort == "asc"):
-                items = Stock.objects.filter(Q(color__icontains=search_data) | Q(amount__icontains=search_data) | Q(item_id__name__icontains=search_data) | 
-            Q(item_id__description__icontains=search_data) | Q(item_id__item_type__icontains=search_data) | Q(item_id__sale_price__icontains=search_data)).order_by(data)
+                items = Stock.objects.filter(Q(color__icontains=search_data) | Q(amount__icontains=search_data) | Q(item_id__name__icontains=search_data) |
+                                             Q(item_id__description__icontains=search_data) | Q(item_id__item_type__icontains=search_data) | Q(item_id__sale_price__icontains=search_data)).order_by(data)
             elif (sort == "desc"):
-                items = Stock.objects.filter(Q(color__icontains=search_data) | Q(amount__icontains=search_data) | Q(item_id__name__icontains=search_data) | 
-            Q(item_id__description__icontains=search_data) | Q(item_id__item_type__icontains=search_data) | Q(item_id__sale_price__icontains=search_data)).order_by('-' + data)
+                items = Stock.objects.filter(Q(color__icontains=search_data) | Q(amount__icontains=search_data) | Q(item_id__name__icontains=search_data) |
+                                             Q(item_id__description__icontains=search_data) | Q(item_id__item_type__icontains=search_data) | Q(item_id__sale_price__icontains=search_data)).order_by('-' + data)
         else:
             items = Stock.objects.all()
         serializer = stockSerializer(items, many=True)
@@ -123,11 +126,12 @@ class api_stock(APIView):
 
     def put(self, request):
         data = json.loads(request.body)
+        item_id = Item.objects.get(pk=data.get('item_id'))
         instance = Stock.objects.get(pk=data.get('id'))
         serializer = stockSerializer(
             data=data, instance=instance, partial=True)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(item_id=item_id)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -163,20 +167,20 @@ class api_employee(APIView):
             sort = False
 
         if search:
-            items = Employee.objects.filter(Q(account__user__first_name__icontains=search) | 
-            Q(account__user__last_name__icontains=search) | Q(account__user__email__icontains=search) | 
-            Q(account__phone__icontains=search) | Q(department__icontains=search))
+            items = Employee.objects.filter(Q(account__user__first_name__icontains=search) |
+                                            Q(account__user__last_name__icontains=search) | Q(account__user__email__icontains=search) |
+                                            Q(account__phone__icontains=search) | Q(department__icontains=search))
         elif id:
             items = Employee.objects.filter(pk=id)
         elif sort:
             if (sort == "asc"):
-                items = Employee.objects.filter(Q(account__user__first_name__icontains=search_data) | 
-            Q(account__user__last_name__icontains=search_data) | Q(account__user__email__icontains=search_data) | 
-            Q(account__phone__icontains=search_data) | Q(department__icontains=search_data)).order_by(data)
+                items = Employee.objects.filter(Q(account__user__first_name__icontains=search_data) |
+                                                Q(account__user__last_name__icontains=search_data) | Q(account__user__email__icontains=search_data) |
+                                                Q(account__phone__icontains=search_data) | Q(department__icontains=search_data)).order_by(data)
             elif (sort == "desc"):
-                items = Employee.objects.filter(Q(account__user__first_name__icontains=search_data) | 
-            Q(account__user__last_name__icontains=search_data) | Q(account__user__email__icontains=search_data) | 
-            Q(account__phone__icontains=search_data) | Q(department__icontains=search_data)).order_by('-' + data)
+                items = Employee.objects.filter(Q(account__user__first_name__icontains=search_data) |
+                                                Q(account__user__last_name__icontains=search_data) | Q(account__user__email__icontains=search_data) |
+                                                Q(account__phone__icontains=search_data) | Q(department__icontains=search_data)).order_by('-' + data)
         else:
             items = Employee.objects.all()
         serializer = employeeSerializer(items, many=True)
@@ -230,19 +234,19 @@ class api_customer(APIView):
             get_data = False
 
         if get_data:
-            items =  Customer.objects.filter(id=get_data)
+            items = Customer.objects.filter(id=get_data)
         elif search:
-            items = Customer.objects.filter(Q(fname__icontains=search) | Q(lname__icontains=search) | Q(email__icontains=search) | 
-            Q(phone__icontains=search) | Q(address__icontains=search))
+            items = Customer.objects.filter(Q(fname__icontains=search) | Q(lname__icontains=search) | Q(email__icontains=search) |
+                                            Q(phone__icontains=search) | Q(address__icontains=search))
         elif id:
             items = Customer.objects.filter(pk=id)
         elif sort:
             if (sort == "asc"):
-                items = Customer.objects.filter(Q(fname__icontains=search_data) | Q(lname__icontains=search_data) | Q(email__icontains=search_data) | 
-            Q(phone__icontains=search_data) | Q(address__icontains=search_data)).order_by(data)
+                items = Customer.objects.filter(Q(fname__icontains=search_data) | Q(lname__icontains=search_data) | Q(email__icontains=search_data) |
+                                                Q(phone__icontains=search_data) | Q(address__icontains=search_data)).order_by(data)
             elif (sort == "desc"):
-                items = Customer.objects.filter(Q(fname__icontains=search_data) | Q(lname__icontains=search_data) | Q(email__icontains=search_data) | 
-            Q(phone__icontains=search_data) | Q(address__icontains=search_data)).order_by('-' + data)
+                items = Customer.objects.filter(Q(fname__icontains=search_data) | Q(lname__icontains=search_data) | Q(email__icontains=search_data) |
+                                                Q(phone__icontains=search_data) | Q(address__icontains=search_data)).order_by('-' + data)
         else:
             items = Customer.objects.all()
         serializer = customerSerializer(items, many=True)
@@ -290,17 +294,17 @@ class api_item(APIView):
             sort = False
 
         if search:
-            items = Item.objects.filter(Q(name__icontains=search) | Q(description__icontains=search) | Q(item_type__icontains=search) | 
-            Q(purchase_price__icontains=search) | Q(sale_price__icontains=search) | Q(supplier_id__name__icontains=search))
+            items = Item.objects.filter(Q(name__icontains=search) | Q(description__icontains=search) | Q(item_type__icontains=search) |
+                                        Q(purchase_price__icontains=search) | Q(sale_price__icontains=search) | Q(supplier_id__name__icontains=search))
         elif id:
             items = Item.objects.filter(pk=id)
         elif sort:
             if (sort == "asc"):
-                items = Item.objects.filter(Q(name__icontains=search_data) | Q(description__icontains=search_data) | Q(item_type__icontains=search_data) | 
-            Q(purchase_price__icontains=search_data) | Q(sale_price__icontains=search_data) | Q(supplier_id__name__icontains=search_data)).order_by(data)
+                items = Item.objects.filter(Q(name__icontains=search_data) | Q(description__icontains=search_data) | Q(item_type__icontains=search_data) |
+                                            Q(purchase_price__icontains=search_data) | Q(sale_price__icontains=search_data) | Q(supplier_id__name__icontains=search_data)).order_by(data)
             elif (sort == "desc"):
-                items = Item.objects.filter(Q(name__icontains=search_data) | Q(description__icontains=search_data) | Q(item_type__icontains=search_data) | 
-            Q(purchase_price__icontains=search_data) | Q(sale_price__icontains=search_data) | Q(supplier_id__name__icontains=search_data)).order_by('-' + data)
+                items = Item.objects.filter(Q(name__icontains=search_data) | Q(description__icontains=search_data) | Q(item_type__icontains=search_data) |
+                                            Q(purchase_price__icontains=search_data) | Q(sale_price__icontains=search_data) | Q(supplier_id__name__icontains=search_data)).order_by('-' + data)
         else:
             items = Item.objects.all()
         serializer = itemSerializer(items, many=True)
@@ -308,11 +312,12 @@ class api_item(APIView):
 
     def put(self, request):
         data = json.loads(request.body)
+        supplier_id = Supplier.objects.get(pk=data.get('supplier_id'))
         instance = Item.objects.get(pk=data.get('id'))
         serializer = itemSerializer(
             data=data, instance=instance, partial=True)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(supplier_id=supplier_id)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
