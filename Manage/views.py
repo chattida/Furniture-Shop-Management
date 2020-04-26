@@ -118,6 +118,13 @@ def edit_customer(request, id):
 
 
 @login_required
+def edit_stock(request, id):
+    context = {}
+    context['id'] = id
+    return render(request, template_name='Edit/edit_stock.html', context=context)
+
+
+@login_required
 def manage_employee(request):
     context = {'all_employee': []}
     employees = Employee.objects.all()
