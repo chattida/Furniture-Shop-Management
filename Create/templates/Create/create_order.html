@@ -1,0 +1,340 @@
+{% extends "base.html" %} {% block content %}
+<div class="mt-4 d-flex">
+  <h5 class="align-self-end">
+    <i class="fas fa-user-friends"></i> สร้างออร์เดอร์สินค้า
+  </h5>
+</div>
+<hr class="mt-2 mb-3 hr-orange" />
+
+<div class="row p-4">
+  <div class="col-5">
+    <div class="form-inline">
+      <label for="show_item">รหัสลูกค้า</label>
+      <input
+      id="search_cus"
+      type="text"
+      class="form-control ml-4"
+      placeholder="รหัสลูกค้า"
+      />
+    </div>
+  </div>
+  <div class="col-7">
+    <p>ชื่อลูกค้า: </p>
+    <p>อีเมล: </p>
+    <p>เบอร์โทรศัพท์: </p>
+    <p>ที่อยู่: </p>
+  </div>
+</div>
+
+<h3 class="mt-4">รายการสินค้า</h3>
+<div class="row mx-3 mt-4">
+  <label for="show_item">ค้นหาสินค้า</label>
+  <div class="input-group">
+      <div class="input-group-prepend">
+      <div class="input-group-text">
+          <i class="fas fa-search"></i>
+      </div>
+      </div>
+      <input
+      id="search_box"
+      type="text"
+      class="form-control"
+      placeholder="ค้นหา"
+      />
+  </div>
+</div>
+
+<div class="table-responsive mt-4">
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th scope="col" style="width: 10%;">
+          <span>รหัสสินค้า</span>
+          <span class="float-right text-secondary" onclick="sort('item_id')"
+            ><i class="fas fa-sort"></i
+          ></span>
+        </th>
+        <th scope="col" style="width: 15%;">
+          <span>ชื่อ</span>
+          <span class="float-right text-secondary" onclick="sort('item_id__name')"
+            ><i class="fas fa-sort"></i
+          ></span>
+        </th>
+        <th scope="col" style="width: 30%;">
+          <span>รายละเอียด</span>
+          <span class="float-right text-secondary" onclick="sort('item_id__description')"
+            ><i class="fas fa-sort"></i
+          ></span>
+        </th>
+        <th scope="col" style="width: 10%;">
+          <span>ประเภท</span>
+          <span class="float-right text-secondary" onclick="sort('item_id__item_type')"
+            ><i class="fas fa-sort"></i
+          ></span>
+        </th>
+        <th scope="col" style="width: 10%;">
+          <span>สี</span>
+          <span class="float-right text-secondary" onclick="sort('color')"
+            ><i class="fas fa-sort"></i
+          ></span>
+        </th>
+        <th scope="col" style="width: 10%;">
+          <span>จำนวน</span>
+          <span class="float-right text-secondary" onclick="sort('amount')"
+            ><i class="fas fa-sort"></i
+          ></span>
+        </th>
+        <th scope="col" style="width: 10%;">
+          <span>ราคา</span>
+          <span class="float-right text-secondary" onclick="sort('item_id__sale_price')"
+            ><i class="fas fa-sort"></i
+          ></span>
+        </th>
+        <th scope="col" style="width: 5%;">
+          <span>เพิ่ม</span>
+        </th>
+      </tr>
+    </thead>
+    <tbody id="data_list"></tbody>
+  </table>
+</div>
+
+<div class="row">
+  <div class="col-6">
+    <span id="item_text"></span>
+  </div>
+  <div class="col-6">
+    <div class="form-inline float-right">
+      <button class="btn btn-orange" onclick="previous_page()">
+        < ย้อนกลับ
+      </button>
+      <input
+        type="text"
+        class="form-control text-center mx-2"
+        id="current_page"
+        style="width: 60px;"
+        value="1"
+        readonly
+      />
+      <button class="btn btn-orange" onclick="next_page()">ถัดไป ></button>
+    </div>
+  </div>
+</div>
+<br>
+<h3 class="mt-4">รายการที่สั่งซื้อ</h3>
+<div class="table-responsive mt-4">
+  <table class="table table-bordered">
+    <thead class="text-center">
+      <tr>
+        <th scope="col" style="width: 10%;">รายการ</th>
+        <th scope="col" style="width: 20%;">ชื่อสินค้า</th>
+        <th scope="col" style="width: 35%;">รายละเอียดสินค้า</th>
+        <th scope="col" style="width: 10%;">สี</th>
+        <th scope="col" style="width: 10%;">จำนวน</th>
+        <th scope="col" style="width: 10%;">ราคา</th>
+        <th scope="col" style="width: 5%;">ลบ</th>
+      </tr>
+    </thead>
+    <tbody id="order_list"></tbody>
+  </table>
+</div>
+
+<script>
+  let timer;
+  let data;
+
+  let current_page = 1;
+  let total_page;
+  let show_item = 3;
+  let total_item;
+
+  let count = 0;
+
+  let sort_status = {
+    id: null,
+    status: null,
+  };
+
+  window.onload = function () {
+    initialize();
+  };
+
+  function initialize() {
+    let search_box = document.getElementById("search_box");
+    search_box.addEventListener("keyup", () => {
+      delay_search(search_box.value, 100);
+    });
+
+    axios.get("/api/stock/").then(function (response) {
+      data = response.data;
+      total_item = data.length;
+
+      let table = document.getElementById("data_list");
+
+      item_list();
+    });
+  }
+
+  function item_list() {
+    let table = document.getElementById("data_list");
+    table.innerHTML = "";
+
+    let start = show_item * (current_page - 1);
+    let stop = show_item * current_page;
+
+    for (let i = start; i < stop; i++) {
+      if (data[i]) {
+        let stock = data[i];
+        let head = document.createElement("tr");
+        head.innerHTML = `
+            <td>${stock['item_id'].id}</td>
+            <td>${stock['item_id'].name}</td>
+            <td>${stock['item_id'].description}</td>
+            <td>${stock['item_id'].item_type}</td>
+            <td>${stock['color']}</td>
+            <td>${stock['amount']}</td>
+            <td>${stock['item_id'].sale_price}</td>
+            <td><button class="btn btn-orange" onclick="get_item(${stock['id']})"><i class="fas fa-plus-square"></i></button></td>
+            `
+        table.append(head);
+      }
+    }
+    item_text();
+  }
+
+  function item_display() {
+    reset_count();
+    item_list();
+  }
+
+  function item_text() {
+    if (total_item >= show_item) {
+      total_page = Math.ceil(total_item / show_item);
+    } else {
+      total_page = 1;
+    }
+
+    display = document.getElementById("item_text");
+    let start = show_item * (current_page - 1) + 1;
+    let stop = show_item * current_page;
+    if (stop > total_item) {
+      stop = total_item;
+    }
+    if (data.length === 0) {
+      start = 0;
+    }
+    display.innerText = `แสดง ${start} ถึง ${stop} จาก ${total_item} รายการ`;
+  }
+
+  function next_page() {
+    if (current_page + 1 <= total_page) {
+      current_page++;
+      document.getElementById("current_page").value = current_page;
+      item_list();
+    }
+  }
+
+  function previous_page() {
+    if (current_page - 1 >= 1) {
+      current_page--;
+      document.getElementById("current_page").value = current_page;
+      item_list();
+    }
+  }
+
+  function sort(event) {
+    let search = document.getElementById("search_box").value;
+
+    if (event !== sort_status.id) {
+      sort_status.id = event;
+      sort_status.status = "asc";
+    } else if (sort_status.status === "asc") {
+      sort_status.status = "desc";
+    } else if (sort_status.status === "desc") {
+      sort_status.status = "asc";
+    }
+
+    axios
+      .get("/api/stock/", {
+        params: {
+          sort: sort_status.status,
+          data: event,
+          search_data: search,
+        },
+      })
+      .then(function (response) {
+        data = response.data;
+        total_item = data.length;
+
+        let table = document.getElementById("data_list");
+        table.innerHTML = "";
+
+        item_list();
+      });
+  }
+
+  function search(value) {
+    reset_count();
+
+    axios
+      .get("/api/stock/", {
+        params: {
+          search: value,
+        },
+      })
+      .then(function (response) {
+        data = response.data;
+        total_item = data.length;
+
+        let table = document.getElementById("data_list");
+        table.innerHTML = "";
+
+        item_list();
+      });
+  }
+
+  function delay_search(value, ms) {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      search(value);
+    }, ms);
+  }
+
+  function reset_count() {
+    current_page = 1;
+    document.getElementById("current_page").value = current_page;
+  }
+
+  function get_item(id) {
+    axios
+      .get("/api/stock/", {
+        params: {
+          get_data: id
+        },
+      })
+      .then(function (response) {
+        data = response.data;
+        add_item();
+      });
+  }
+
+  function add_item() {
+    let order_table = document.getElementById("order_list");
+    if (data[0]) {
+        let item_data = data[0];
+        let new_item = document.createElement("tr");
+        new_item.innerHTML = `
+            <td>${++count}</td>
+            <td>${item_data['item_id'].name}</td>
+            <td>${item_data['item_id'].description}</td>
+            <td>${item_data['color']}</td>
+            <td><input type="number" value='1'></td>
+            <td>${item_data['item_id'].sale_price}</td>
+            <td><button class="btn btn-danger" onclick="deleteItem(${count})"><i class="fas fa-minus-square"></i></button></td>
+            `
+        order_table.append(new_item);
+    }
+  }
+</script>
+
+{% endblock content %}

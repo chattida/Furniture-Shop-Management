@@ -96,7 +96,15 @@ class api_stock(APIView):
         except:
             sort = False
 
-        if search:
+        # get parameter order
+        try:
+            get_data = request.query_params['get_data']
+        except:
+            get_data = False
+
+        if get_data:
+            items =  Stock.objects.filter(id=get_data)
+        elif search:
             items = Stock.objects.filter(Q(color__icontains=search) | Q(amount__icontains=search) | Q(item_id__name__icontains=search) | 
             Q(item_id__description__icontains=search) | Q(item_id__item_type__icontains=search) | Q(item_id__sale_price__icontains=search))
         elif id:
