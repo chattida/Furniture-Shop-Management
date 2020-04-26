@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from Manage.models import Supplier, Stock, Customer
+from Manage.models import Supplier, Item, Stock, Customer
 
 
 class supplierSerializer(serializers.ModelSerializer):
@@ -21,6 +21,14 @@ class supplierSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 "* กรุณากรอกเบอร์มือถือให้ถูกต้อง")
         return value
+
+class itemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Item
+        fields = ['id', 'name', 'description',
+                  'item_type', 'purchase_price', 'sale_price', 'supplier_id']
+        read_only_fields = ['id']
+
 
 
 class stockSerializer(serializers.ModelSerializer):

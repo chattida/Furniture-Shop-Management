@@ -7,8 +7,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from API.serializers import stockSerializer, supplierSerializer, customerSerializer
-from Manage.models import Stock, Supplier, Customer, Stock
+from API.serializers import supplierSerializer, customerSerializer, itemSerializer, stockSerializer
+from Manage.models import Stock, Supplier, Customer, Item, Stock
 from Account.models import Employee
 
 # Create your views here.
@@ -173,6 +173,51 @@ class api_customer(APIView):
 
 class api_item(APIView):
     permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        # get parameter search
+        try:
+            search = request.query_params['search']
+        except:
+            search = False
+
+        # get parameter id
+        try:
+            id = request.query_params['id']
+        except:
+            id = False
+
+        # get parameter sort
+        try:
+            sort = request.query_params['sort']
+            data = request.query_params['data']
+            search_data = request.query_params['search_data']
+        except:
+            sort = False
+
+        if search:
+            items = Item.objects.filter(Q(name__icontains=search))
+        elif id:
+            items = Item.objects.filter(pk=id)
+        elif sort:
+            if (sort == "asc"):
+                items = Item.objects.filter(Q(name__icontains=search_data)).order_by(data)
+            elif (sort == "desc"):
+                items = Item.objects.filter(Q(name__icontains=search_data)).order_by('-' + data)
+        else:
+            items = Item.objects.all()
+        serializer = itemSerializer(items, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def put(self, request):
+        data = json.loads(request.body)
+        instance = Item.objects.get(pk=data.get('id'))
+        serializer = itemSerializer(
+            data=data, instance=instance, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request):
         data = json.loads(request.body)

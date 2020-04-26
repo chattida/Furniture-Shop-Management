@@ -113,10 +113,10 @@ class addStockForm(forms.ModelForm):
         labels = {
             'color': 'สี',
             'amount': 'จำนวนสินค้าในสต็อก',
-            'item_id': 'รหัสสินค้า'
+            'item_id': 'ชื่อสินค้า'
         }
         error_messages = {
             'item_id': {
-                'invalid_choice': ("ไม่พบข้อมูลสินค้า")
+                'invalid_choice': ("โปรดเลือกชื่อสินค้า")
             }
         }
