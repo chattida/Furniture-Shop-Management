@@ -84,25 +84,7 @@
         </th>
       </tr>
     </thead>
-    <tbody id="data_list">
-      {% for customer in all_customer%}
-      <tr>
-        <th scope="row">{{ customer.id }}</th>
-        <td>{{ customer.fname }} {{ customer.lname }}</td>
-        <td>{{ customer.phone }}</td>
-        <td>{{ customer.email }}</td>
-        <td>{{ customer.address }}</td>
-        <td>
-          <a
-            href="{% url 'edit_customer' customer.id %}"
-            class="btn btn-warning"
-          >
-            <i class="fas fa-user-edit"></i> แก้ไขข้อมูล
-          </a>
-        </td>
-      </tr>
-      {% endfor %}
-    </tbody>
+    <tbody id="data_list"></tbody>
   </table>
 </div>
 
