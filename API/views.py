@@ -97,14 +97,17 @@ class api_stock(APIView):
             sort = False
 
         if search:
-            items = Stock.objects.filter(Q(color__icontains=search) | Q(amount__icontains=search))
+            items = Stock.objects.filter(Q(color__icontains=search) | Q(amount__icontains=search) | Q(item_id__name__icontains=search) | 
+            Q(item_id__description__icontains=search) | Q(item_id__item_type__icontains=search) | Q(item_id__sale_price__icontains=search))
         elif id:
             items = Stock.objects.filter(pk=id)
         elif sort:
             if (sort == "asc"):
-                items = Stock.objects.filter(Q(color__icontains=search_data) | Q(amount__icontains=search_data)).order_by(data)
+                items = Stock.objects.filter(Q(color__icontains=search_data) | Q(amount__icontains=search_data) | Q(item_id__name__icontains=search_data) | 
+            Q(item_id__description__icontains=search_data) | Q(item_id__item_type__icontains=search_data) | Q(item_id__sale_price__icontains=search_data)).order_by(data)
             elif (sort == "desc"):
-                items = Stock.objects.filter(Q(color__icontains=search_data) | Q(amount__icontains=search_data)).order_by('-' + data)
+                items = Stock.objects.filter(Q(color__icontains=search_data) | Q(amount__icontains=search_data) | Q(item_id__name__icontains=search_data) | 
+            Q(item_id__description__icontains=search_data) | Q(item_id__item_type__icontains=search_data) | Q(item_id__sale_price__icontains=search_data)).order_by('-' + data)
         else:
             items = Stock.objects.all()
         serializer = stockSerializer(items, many=True)
