@@ -28,6 +28,7 @@ class itemSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'description',
                   'item_type', 'purchase_price', 'sale_price', 'supplier_id']
         read_only_fields = ['id']
+        depth = 1
 
 
 
