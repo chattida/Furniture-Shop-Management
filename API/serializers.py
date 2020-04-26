@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from Manage.models import Supplier, Stock, Customer, Item
+from Manage.models import Supplier, Stock, Customer
 
 
 class supplierSerializer(serializers.ModelSerializer):
