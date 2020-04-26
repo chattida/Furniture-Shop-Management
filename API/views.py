@@ -101,8 +101,6 @@ class api_stock(APIView):
         elif id:
             items = Stock.objects.filter(pk=id)
         elif sort:
-            print(sort)
-            print(data)
             if (sort == "asc"):
                 items = Stock.objects.filter(Q(color__icontains=search_data) | Q(amount__icontains=search_data)).order_by(data)
             elif (sort == "desc"):

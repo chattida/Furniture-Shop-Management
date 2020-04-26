@@ -92,11 +92,11 @@ class addItemForm(forms.ModelForm):
             'item_type': 'ประเภทสินค้า',
             'purchase_price': 'ราคาซื้อ',
             'sale_price': 'ราคาขาย',
-            'supplier_id': 'รหัสผู้ผลิต'
+            'supplier_id': 'ชื่อบริษัท'
         }
         error_messages = {
             'supplier_id': {
-                'invalid_choice': ("ไม่พบข้อมูลผู้ผลิต")
+                'invalid_choice': ("โปรดเลือกชื่อบริษัท")
             }
         }
 
