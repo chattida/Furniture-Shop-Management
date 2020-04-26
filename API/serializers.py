@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from Manage.models import Supplier, Stock, Customer
+from Manage.models import Supplier, Stock, Customer, Item
 
 
 class supplierSerializer(serializers.ModelSerializer):
@@ -27,6 +27,8 @@ class stockSerializer(serializers.ModelSerializer):
     class Meta:
         model = Stock
         fields = ['id', 'item_id', 'color', 'amount']
+        read_only_fields = ['id']
+        depth = 1
 
 
 class customerSerializer(serializers.ModelSerializer):

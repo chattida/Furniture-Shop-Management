@@ -76,9 +76,56 @@ class api_stock(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        items = Stock.objects.all()
+        # get parameter search
+        try:
+            search = request.query_params['search']
+        except:
+            search = False
+
+        # get parameter id
+        try:
+            id = request.query_params['id']
+        except:
+            id = False
+
+        # get parameter sort
+        try:
+            sort = request.query_params['sort']
+            data = request.query_params['data']
+            search_data = request.query_params['search_data']
+        except:
+            sort = False
+
+        if search:
+            items = Stock.objects.filter(Q(color__icontains=search) | Q(amount__icontains=search))
+        elif id:
+            items = Stock.objects.filter(pk=id)
+        elif sort:
+            print(sort)
+            print(data)
+            if (sort == "asc"):
+                items = Stock.objects.filter(Q(color__icontains=search_data) | Q(amount__icontains=search_data)).order_by(data)
+            elif (sort == "desc"):
+                items = Stock.objects.filter(Q(color__icontains=search_data) | Q(amount__icontains=search_data)).order_by('-' + data)
+        else:
+            items = Stock.objects.all()
         serializer = stockSerializer(items, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def put(self, request):
+        data = json.loads(request.body)
+        instance = Stock.objects.get(pk=data.get('id'))
+        serializer = stockSerializer(
+            data=data, instance=instance, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    # def get(self, request):
+    #     items = Stock.objects.all()
+    #     serializer = stockSerializer(items, many=True)
+    #     return Response(serializer.data, status=status.HTTP_200_OK)
 
     def delete(self, request):
         data = json.loads(request.body)
