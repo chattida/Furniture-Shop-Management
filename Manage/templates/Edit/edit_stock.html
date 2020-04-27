@@ -145,12 +145,15 @@
     function save() {
       axios.put("/api/stock/", {
         id: stock_id,
-        email: document.getElementById('color').value,
-        phone: document.getElementById('amount').value,
-        account_id: user_id
+        item_id: document.getElementById('dropdown_item').value,
+        color: document.getElementById('color').value,
+        amount: document.getElementById('amount').value,
       }).then((response) => {
         window.location.href = "/manage/stock/";
       }).catch((error) => {
+        if (error.response.data.item_id){
+          document.getElementById('error_item_id').innerText = error.response.data.color[0]
+        }
         if (error.response.data.color){
           document.getElementById('error_color').innerText = error.response.data.color[0]
         }
