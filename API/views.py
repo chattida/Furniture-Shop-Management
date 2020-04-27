@@ -105,6 +105,13 @@ class api_stock(APIView):
             sort = request.query_params['sort']
             data = request.query_params['data']
             search_data = request.query_params['search_data']
+            # get parameter del_list
+            try:
+                del_list = request.query_params['del_list']
+                del_list = del_list.split(",")
+                del_list = list(map(int, del_list))
+            except:
+                del_list = []
         except:
             sort = False
 
@@ -116,18 +123,18 @@ class api_stock(APIView):
 
         if get_data:
             items = Stock.objects.filter(id=get_data)
-        elif search:
-            items = Stock.objects.filter(Q(color__icontains=search) | Q(amount__icontains=search) | Q(item_id__name__icontains=search) |
-                                         Q(item_id__description__icontains=search) | Q(item_id__item_type__icontains=search) | Q(item_id__sale_price__icontains=search)).exclude(id__in=del_list)
         elif id:
             items = Stock.objects.filter(pk=id)
         elif sort:
             if (sort == "asc"):
                 items = Stock.objects.filter(Q(color__icontains=search_data) | Q(amount__icontains=search_data) | Q(item_id__name__icontains=search_data) |
-                                             Q(item_id__description__icontains=search_data) | Q(item_id__item_type__icontains=search_data) | Q(item_id__sale_price__icontains=search_data)).order_by(data)
+                                             Q(item_id__description__icontains=search_data) | Q(item_id__item_type__icontains=search_data) | Q(item_id__sale_price__icontains=search_data)).exclude(id__in=del_list).order_by(data)
             elif (sort == "desc"):
                 items = Stock.objects.filter(Q(color__icontains=search_data) | Q(amount__icontains=search_data) | Q(item_id__name__icontains=search_data) |
-                                             Q(item_id__description__icontains=search_data) | Q(item_id__item_type__icontains=search_data) | Q(item_id__sale_price__icontains=search_data)).order_by('-' + data)
+                                             Q(item_id__description__icontains=search_data) | Q(item_id__item_type__icontains=search_data) | Q(item_id__sale_price__icontains=search_data)).exclude(id__in=del_list).order_by('-' + data)
+        elif search:
+            items = Stock.objects.filter(Q(color__icontains=search) | Q(amount__icontains=search) | Q(item_id__name__icontains=search) |
+                                         Q(item_id__description__icontains=search) | Q(item_id__item_type__icontains=search) | Q(item_id__sale_price__icontains=search)).exclude(id__in=del_list)
         else:
             items = Stock.objects.all()
         serializer = stockSerializer(items, many=True)
