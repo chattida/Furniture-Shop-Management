@@ -71,19 +71,26 @@ def send_order(request):
         orders.total_price = total_price_now
         orders.save()
 
-        send_status = {
-            'complete_add': complete_add,
-            'fail_add': fail_add,
-            'total_price': total_price_now,
-            'list_item': list_item,
-            'items_value': items_value,
-            'cus_id': cus_id
-        }
-
-        return redirect('index')
+        if (sum(fail_add)):
+            send_status = {
+                'complete_add': complete_add,
+                'fail_add': fail_add,
+                'total_price': total_price_now,
+                'list_item': list_item,
+                'items_value': items_value,
+                'cus_id': cus_id
+            }
+            return show_status(request, send_status)
 
     return redirect('index')
 
 @login_required
-def show_status(request, id):
-    pass
+def show_status(request, error_msg):
+    context = {
+        'error': []
+    }
+    for i in range(len(error_msg['fail_add'])):
+        if error_msg['fail_add'][i] != 0:
+            txt_error = 'รายการ ' + Stock.objects.get(pk=error_msg['list_item'][i]).item_id.name + ' สามารถสั่งได้เพียง ' + str(error_msg['complete_add'][i]) + ' ชิ้น เนื่องจากรายการสินค้านี้มีจำนวนไม่พอ'
+            context['error'].append(txt_error)
+    return render(request, template_name='Create/show_status.html', context=context)
