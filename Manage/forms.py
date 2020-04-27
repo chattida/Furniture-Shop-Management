@@ -76,8 +76,8 @@ class addSupplierForm(forms.ModelForm):
 class addItemForm(forms.ModelForm):
     class Meta:
         model = Item
-        fields = ('name', 'description', 'item_type',
-                  'purchase_price', 'sale_price', 'supplier_id')
+        fields = ('name', 'supplier_id', 'description', 'item_type',
+                  'purchase_price', 'sale_price')
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control mt-0 mb-2'}),
             'description': forms.Textarea(attrs={'class': 'form-control mt-0 mb-2', 'rows': 4}),

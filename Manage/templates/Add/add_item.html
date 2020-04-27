@@ -6,23 +6,37 @@
   <div class="row">
     <div class="col-8 mx-auto">
       {% if field.label == 'ชื่อบริษัท' %}
-      <div class="input-group w-75 my-2">
-        <div class="input-group-prepend">
-          <label for="{{ field.id_for_label }}" class="mt-2"
-        >{{ field.label }}:</label>
-          <div class="ml-4 input-group-text">
-            <i class="fas fa-search"></i>
+      <label for="{{ field.id_for_label }}" class="mt-2"
+        >{{ field.label }}:</label
+      >
+      <div class="form-group text-white">
+        <div class="input-group mb-2 mr-sm-2">
+          <div class="input-group-prepend">
+            <div class="input-group-text">
+              <i class="fas fa-search"></i>
+            </div>
           </div>
+          <input
+            id="search_box"
+            type="text"
+            class="form-control w-25"
+            placeholder="ค้นหา"
+          />
+          <select
+            name="{{ field.name }}"
+            id="{{ field.id_for_label }}"
+            class="form-control ml-3"
+            required
+          >
+            <option value="none" selected>โปรดเลือก</option>
+          </select>
         </div>
-        <input id="search_box" type="text" class="form-control w-25" placeholder="ค้นหา">
-        <select name="{{ field.name }}" id="{{ field.id_for_label }}" class="form-control" required>
-          <option value="none" selected>โปรดเลือก</option>
-        </select>
       </div>
       <p class="text-error my-1">{{ field.errors.as_text }}</p>
       {% else %}
       <label for="{{ field.id_for_label }}" class="mt-1"
-        >{{ field.label }}:</label>
+        >{{ field.label }}:</label
+      >
       {{ field }}
       <p class="text-error my-1">{{ field.errors.as_text }}</p>
       {% endif %}
@@ -63,14 +77,15 @@
   function item_list() {
     let dropdown_item = document.getElementById("id_supplier_id");
     if (total_item != 1)
-      dropdown_item.innerHTML = "<option value='none' selected>โปรดเลือก</option>";
+      dropdown_item.innerHTML =
+        "<option value='none' selected>โปรดเลือก</option>";
 
     for (let i = 0; i < total_item; i++) {
       if (data[i]) {
         let supplier = data[i];
         let item = document.createElement("option");
-        item.innerText = supplier.name
-        item.value = supplier.id
+        item.innerText = supplier.name;
+        item.value = supplier.id;
         dropdown_item.append(item);
       }
     }
