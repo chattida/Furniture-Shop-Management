@@ -151,7 +151,7 @@
         window.location.href = "/manage/stock/";
       }).catch((error) => {
         if (error.response.data.item_id){
-          document.getElementById('error_item_id').innerText = error.response.data.color[0]
+          document.getElementById('error_item_id').innerText = error.response.data.item_id[0]
         }
         if (error.response.data.color){
           document.getElementById('error_color').innerText = error.response.data.color[0]
