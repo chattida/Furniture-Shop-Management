@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from Manage.models import Supplier, Item, Stock, Customer
-from Account.models import Employee
+from Account.models import Employee, Account
+from django.contrib.auth.models import User
 
 
 class supplierSerializer(serializers.ModelSerializer):
@@ -23,6 +24,7 @@ class supplierSerializer(serializers.ModelSerializer):
                 "* กรุณากรอกเบอร์มือถือให้ถูกต้อง")
         return value
 
+
 class itemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item
@@ -43,7 +45,7 @@ class itemSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 "* กรุณากรอกราคาซื้อให้ถูกต้อง")
         return value
-    
+
     def validate_sale_price(self, value):
         if value <= 0:
             raise serializers.ValidationError(
@@ -96,3 +98,26 @@ class employeeSerializer(serializers.ModelSerializer):
         fields = ['id', 'department', 'owner_id', 'account']
         read_only_fields = ['id']
         depth = 2
+
+
+class accountSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Account
+        fields = ['id', 'phone', 'user']
+        read_only_fields = ['id']
+        extra_kwargs = {
+            'phone': {"error_messages": {"blank": "* กรุณากรอกเบอร์มือถือ"}},
+        }
+
+    def validate_phone(self, value):
+        if len(value) != 10:
+            raise serializers.ValidationError(
+                "* กรุณากรอกเบอร์มือถือให้ถูกต้อง")
+        return value
+
+
+class userSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'first_name', 'last_name', 'email']
+        read_only_fields = ['id']

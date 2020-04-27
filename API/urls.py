@@ -12,5 +12,7 @@ urlpatterns = [
     path('customer/', views.api_customer.as_view(),
          name='api_customer'),
     path('item/', views.api_item.as_view(),
-         name='api_item')
+         name='api_item'),
+    path('user/', views.api_user.as_view(),
+         name='api_user')
 ]

@@ -11,8 +11,10 @@ from rest_framework.views import APIView
 from Account.models import Employee
 from API.serializers import (customerSerializer, employeeSerializer,
                              itemSerializer, stockSerializer,
-                             supplierSerializer)
+                             supplierSerializer, userSerializer)
 from Manage.models import Customer, Item, Stock, Supplier
+from django.contrib.auth.models import User
+
 
 # Create your views here.
 
@@ -156,7 +158,6 @@ class api_stock(APIView):
         stock = Stock.objects.get(pk=data.get('id'))
         stock.delete()
         return Response(status=status.HTTP_200_OK)
-
 
 
 class api_employee(APIView):
@@ -343,3 +344,21 @@ class api_item(APIView):
         item = Item.objects.get(pk=data.get('id'))
         item.delete()
         return Response(status=status.HTTP_200_OK)
+
+
+class api_user(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        # get parameter id
+        try:
+            id = request.query_params['id']
+        except:
+            id = False
+
+        if id:
+            items = User.objects.filter(pk=id)
+        else:
+            items = User.objects.all()
+        serializer = userSerializer(items, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
