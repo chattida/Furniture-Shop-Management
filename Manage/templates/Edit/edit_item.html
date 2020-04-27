@@ -162,6 +162,12 @@
     }
 
     function save() {
+      document.getElementById('error_name').innerText = ""
+      document.getElementById('error_description').innerText = ""
+      document.getElementById('error_item_type').innerText = ""
+      document.getElementById('error_purchase_price').innerText = ""
+      document.getElementById('error_sale_price').innerText = ""
+
       axios.put("/api/item/", {
         id: item_id,
         name: document.getElementById('name').value,

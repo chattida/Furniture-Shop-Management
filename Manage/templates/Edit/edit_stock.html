@@ -142,11 +142,15 @@
     }
 
     function save() {
+      document.getElementById('dropdown_item').innerText = ""
+      document.getElementById('color').innerText = ""
+      document.getElementById('amount').innerText = ""
+
       axios.put("/api/stock/", {
         id: stock_id,
-        item_id: document.getElementById('dropdown_item').value,
-        color: document.getElementById('color').value,
-        amount: document.getElementById('amount').value,
+        item_id: document.getElementById('error_item_id').value,
+        color: document.getElementById('error_color').value,
+        amount: document.getElementById('error_amount').value,
       }).then((response) => {
         window.location.href = "/manage/stock/";
       }).catch((error) => {

@@ -118,6 +118,12 @@
       }
 
       function save() {
+        document.getElementById('error_fname').innerText = ""
+        document.getElementById('error_lname').innerText = ""
+        document.getElementById('error_email').innerText = ""
+        document.getElementById('error_phone').innerText = ""
+        document.getElementById('error_address').innerText = ""
+        
         axios.put("/api/customer/", {
           id: customer_id,
           fname: document.getElementById('fname').value,

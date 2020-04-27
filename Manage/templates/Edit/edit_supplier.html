@@ -116,6 +116,11 @@
   }
 
   function save() {
+    document.getElementById('error_name').innerText = ""
+    document.getElementById('error_email').innerText = ""
+    document.getElementById('error_phone').innerText = ""
+    document.getElementById('error_address').innerText = ""
+
     axios.put("/api/supplier/", {
       id: supplier_id,
       name: document.getElementById('name').value,
