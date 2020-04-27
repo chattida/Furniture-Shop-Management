@@ -3,7 +3,7 @@ from django.core.validators import validate_email
 from rest_framework import serializers
 
 from Account.models import Account, Employee
-from Manage.models import Customer, Item, Stock, Supplier
+from Manage.models import Customer, Item, Stock, Supplier, Order, Order_Item
 
 
 class supplierSerializer(serializers.ModelSerializer):
@@ -135,3 +135,11 @@ class userSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 "* กรุณากรอกนามสกุล")
         return value
+
+
+class orderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = ['id', 'total_price', 'create_date', 'account_id', 'cus_id']
+        read_only_fields = ['id']
+        depth = 1

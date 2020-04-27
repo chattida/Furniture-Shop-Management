@@ -135,3 +135,8 @@ STATICFILES_DIRS = [
 
 # If not login redirect to this page
 LOGIN_URL = '/login/'
+
+# REST_FRAMEWORK
+REST_FRAMEWORK = {
+    'DATETIME_FORMAT': "%d/%m/%Y - %H:%M:%S",
+}

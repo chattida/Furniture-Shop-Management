@@ -39,33 +39,34 @@
   <table class="table table-bordered">
     <thead>
       <tr>
-        <th scope="col" style="width: 15%;">
+        <th scope="col" style="width: 10%;">
           <span>เลขที่ใบสั่งซื้อ</span>
-          <span class="float-right text-secondary" onclick="sort('item_id')"
-            ><i class="fas fa-sort"></i
-          ></span>
-        </th>
-        <th scope="col" style="width: 25%;">
-          <span>ชื่อลูกค้า</span>
-          <span
-            class="float-right text-secondary"
-            onclick="sort('item_id__name')"
+          <span class="float-right text-secondary" onclick="sort('id')"
             ><i class="fas fa-sort"></i
           ></span>
         </th>
         <th scope="col" style="width: 20%;">
-          <span>ราคารวม</span>
-          <span class="float-right text-secondary" onclick="sort('item_id')"
+          <span>ชื่อลูกค้า</span>
+          <span
+            class="float-right text-secondary"
+            onclick="sort('cus_id__fname')"
             ><i class="fas fa-sort"></i
           ></span>
         </th>
-        <th scope="col" style="width: 30%;">
-          <span>วันที่สั่งซื้อ</span>
-          <span
-            class="float-right text-secondary"
-            onclick="sort('item_id__description')"
+        <th scope="col" style="width: 15%;">
+          <span>ราคารวม</span>
+          <span class="float-right text-secondary" onclick="sort('total_price')"
             ><i class="fas fa-sort"></i
           ></span>
+        </th>
+        <th scope="col" style="width: 15%;">
+          <span>วันที่สั่งซื้อ</span>
+          <span class="float-right text-secondary" onclick="sort('create_date')"
+            ><i class="fas fa-sort"></i
+          ></span>
+        </th>
+        <th scope="col" style="width: 12%;">
+          <span>รายละเอียด</span>
         </th>
       </tr>
     </thead>
@@ -94,4 +95,173 @@
     </div>
   </div>
 </div>
+<!-- script -->
+<script>
+  let timer;
+  let data;
+
+  let current_page = 1;
+  let total_page;
+  let show_item;
+  let total_item;
+
+  let sort_status = {
+    id: null,
+    status: null,
+  };
+  let last_event;
+
+  window.onload = function () {
+    initialize();
+  };
+
+  function initialize() {
+    show_item = parseInt(document.getElementById("show_item").value);
+    let search_box = document.getElementById("search_box");
+    search_box.addEventListener("keyup", () => {
+      delay_search(search_box.value, 100);
+    });
+
+    axios.get("/api/owner/").then(function (response) {
+      data = response.data;
+      total_item = data.length;
+
+      let table = document.getElementById("data_list");
+
+      item_list();
+    });
+  }
+
+  function item_list() {
+    show_item = parseInt(document.getElementById("show_item").value);
+    let table = document.getElementById("data_list");
+    table.innerHTML = "";
+
+    let start = show_item * (current_page - 1);
+    let stop = show_item * current_page;
+
+    for (let i = start; i < stop; i++) {
+      if (data[i]) {
+        let owner = data[i];
+        let head = document.createElement("tr");
+        head.innerHTML = `
+            <td>${owner.id}</td>
+            <td>${owner["cus_id"].fname} ${owner["cus_id"].lname}</td>
+            <td>${owner.total_price}</td>
+            <td>${owner.create_date}</td>
+            <td><button class="btn btn-orange" onclick=""><i class="fas fa-file-invoice-dollar mx-1"></i> ดูรายละเอียด</button></td>`;
+        table.append(head);
+      }
+    }
+
+    item_text();
+  }
+
+  function item_display() {
+    reset_count();
+    item_list();
+  }
+
+  function item_text() {
+    if (total_item >= show_item) {
+      total_page = Math.ceil(total_item / show_item);
+    } else {
+      total_page = 1;
+    }
+
+    display = document.getElementById("item_text");
+    let start = show_item * (current_page - 1) + 1;
+    let stop = show_item * current_page;
+    if (stop > total_item) {
+      stop = total_item;
+    }
+    if (data.length === 0) {
+      start = 0;
+    }
+    display.innerText = `แสดง ${start} ถึง ${stop} จาก ${total_item} รายการ`;
+  }
+
+  function next_page() {
+    if (current_page + 1 <= total_page) {
+      current_page++;
+      document.getElementById("current_page").value = current_page;
+      item_list();
+    }
+  }
+
+  function previous_page() {
+    if (current_page - 1 >= 1) {
+      current_page--;
+      document.getElementById("current_page").value = current_page;
+      item_list();
+    }
+  }
+
+  function sort(event) {
+    let search = document.getElementById("search_box").value;
+    last_event = event;
+
+    if (event !== sort_status.id) {
+      sort_status.id = event;
+      sort_status.status = "asc";
+    } else if (sort_status.status === "asc") {
+      sort_status.status = "desc";
+    } else if (sort_status.status === "desc") {
+      sort_status.status = "asc";
+    }
+
+    axios
+      .get("/api/owner/", {
+        params: {
+          sort: sort_status.status,
+          data: event,
+          search_data: search,
+        },
+      })
+      .then(function (response) {
+        data = response.data;
+        total_item = data.length;
+
+        let table = document.getElementById("data_list");
+        table.innerHTML = "";
+
+        item_list();
+      });
+  }
+
+  function search(value) {
+    reset_count();
+
+    axios
+      .get("/api/owner/", {
+        params: {
+          search: value,
+          sort: sort_status.status,
+          data: last_event,
+          search_data: value,
+        },
+      })
+      .then(function (response) {
+        data = response.data;
+        total_item = data.length;
+
+        let table = document.getElementById("data_list");
+        table.innerHTML = "";
+
+        item_list();
+      });
+  }
+
+  function delay_search(value, ms) {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      search(value);
+    }, ms);
+  }
+
+  function reset_count() {
+    current_page = 1;
+    document.getElementById("current_page").value = current_page;
+  }
+</script>
 {% endblock content %}
