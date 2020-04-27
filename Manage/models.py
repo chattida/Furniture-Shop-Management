@@ -37,13 +37,15 @@ class Stock(models.Model):
 class Order(models.Model):
     total_price = models.DecimalField(max_digits=8, decimal_places=2)
     create_date = models.DateTimeField(auto_now=True)
-    account_id = models.ForeignKey(Account, on_delete=models.CASCADE)
+    account_id = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True)
     cus_id = models.ForeignKey(Customer, on_delete=models.CASCADE)
 
 
 class Order_Item(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField(null=True)
+    item_type = models.CharField(max_length=255)
     amount = models.IntegerField()
     color = models.CharField(max_length=255)
     price = models.DecimalField(max_digits=8, decimal_places=2)
     order_id = models.ForeignKey(Order, on_delete=models.CASCADE)
-    item_id = models.ForeignKey(Item, on_delete=models.CASCADE)
