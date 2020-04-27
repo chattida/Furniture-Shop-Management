@@ -1,42 +1,15 @@
 {% extends "base.html" %} {% block content %}
-{% comment %} <h1>Send Data</h1>
-<h4>รหัสลูกค้า {{ cus_id }}</h4>
-<h4>รายการที่สั่ง {{ list_item }}</h4>
-<h4>จำนวนชิ้นต่อรายการ {{ items_value }}</h4>
-<h4>ราคารวม {{ total_price }}</h4>
-<h3 class="mt-4">รายการที่สั่งซื้อ</h3>
-<div class="table-responsive mt-4">
-  <table class="table table-bordered">
-    <thead class="text-center">
-      <tr>
-        <th scope="col" style="width: 20%;">ชื่อสินค้า</th>
-        <th scope="col" style="width: 25%;">รายละเอียดสินค้า</th>
-        <th scope="col" style="width: 10%;">สี</th>
-        <th scope="col" style="width: 10%;">จำนวน</th>
-        <th scope="col" style="width: 10%;">ราคาต่อชิ้น</th>
-        <th scope="col" style="width: 10%;">ราคารวม</th>
-        <th scope="col" style="width: 5%;">ลบ</th>
-      </tr>
-    </thead>
-    <tbody id="order_list">
-      {% for complete in complete_add %}
-        <tr>
-          <th scope="col" style="width: 10%;"></th>
-          <th scope="col" style="width: 15%;">ชื่อสินค้า</th>
-          <th scope="col" style="width: 20%;">รายละเอียดสินค้า</th>
-          <th scope="col" style="width: 10%;">สี</th>
-          <th scope="col" style="width: 10%;">จำนวน</th>
-          <th scope="col" style="width: 10%;">ราคาต่อชิ้น</th>
-          <th scope="col" style="width: 10%;">ราคารวม</th>
-          <th scope="col" style="width: 5%;">ลบ</th>
-        </tr>
-      {% endfor %}
-
-      <tr id="total_all">
-        <th colspan="6" scope="col" style="width: 10%;" class="pl-4">รวมทั้งหมด</th>
-        <th colspan="2" scope="col" style="width: 5%;" class="pr-4 text-right">{{ total_price }} บาท</th>
-      </tr>
-    </tbody>
-  </table>
-</div> {% endcomment %}
+<div class="mt-4 d-flex">
+  <h5 class="align-self-end">
+    <i class="fas fa-user-friends"></i> มีข้อผิดพลาดระหว่างการสั่งซื้อ
+  </h5>
+</div>
+<hr class="mt-2 mb-3 hr-orange" />
+<div class="text-center">
+  {% for i in error %}
+    <p class="text-danger m-4">{{ i }}</p>
+  {% endfor %}
+  <a href="{% url 'index' %}" class="btn btn-orange p-3 m-2">กลับไปหน้าหลัก</a>
+  <a href="" class="btn btn-orange p-3 m-2">ดูรายละเอียดคำสั่งซื้อ</a>
+</div>
 {% endblock content %}
