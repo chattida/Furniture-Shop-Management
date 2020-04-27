@@ -1,6 +1,6 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import render, redirect
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from Manage.models import Customer, Supplier, Item, Stock
 from Account.models import Account, Employee, Owner
 from Manage.forms import addCustomerForm, addSupplierForm, addItemForm, addStockForm
@@ -248,3 +248,86 @@ def add_stock(request):
         context['form'] = form
 
     return render(request, template_name='Add/add_stock.html', context={'form': form})
+
+
+@login_required
+@permission_required('Account.add_employee')
+def add_employee(request):
+    context = {}
+    # Get detail in form
+    if (request.method == 'POST'):
+        first_name = request.POST.get('fname')
+        last_name = request.POST.get('lname')
+        email = request.POST.get('email')
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        password2 = request.POST.get('password2')
+        phone = request.POST.get('phone')
+        acc_type = request.POST.get('type')
+
+        context = {
+            'fname': first_name,
+            'lname': last_name,
+            'email': email,
+            'username': username,
+            'password': password,
+            'phone': phone
+        }
+
+        # Check already used
+        if (User.objects.filter(username=username).exists()):
+            context['error'] = 'Username is already used!'
+            return render(request, 'Account/register.html', context=context)
+        elif (User.objects.filter(email=email).exists()):
+            context['error'] = 'Email is already used!'
+            return render(request, 'Account/register.html', context=context)
+        elif password != password2:
+            context['error'] = 'Password not match!'
+            return render(request, 'Account/register.html', context=context)
+
+        # Add user to DB
+        user = User.objects.create_user(
+            username=username,
+            password=password,
+            first_name=first_name,
+            last_name=last_name,
+            email=email
+        )
+
+        account = Account(
+            user=User.objects.get(username=username),
+            phone=phone
+        )
+        account.save()
+
+        employee = Employee(
+            account=Account.objects.get(user_id=User.objects.get(username=username)),
+            owner_id=Owner.objects.get(account_id=Account.objects.get(user_id=request.user.id))
+        )
+
+        if acc_type == 'po':
+            try:
+                Group.objects.get(name='Purchasing_Officer')
+            except:
+                g_po = Group.objects.create(name='Purchasing_Officer')
+                # l_po = []
+                # g_po.permissions.set(l_po)
+
+            employee.department = 'PURCHASING_OFFICER'
+            user.groups.add(Group.objects.get(name='Purchasing_Officer'))
+
+        elif acc_type == 'so':
+            try:
+                Group.objects.get(name='Sale_Officer')
+            except:
+                g_so = Group.objects.create(name='Sale_Officer')
+                # l_so = []
+                # g_so.permissions.set(l_so)
+
+            employee.department = 'SALE_OFFICER'
+            user.groups.add(Group.objects.get(name='Sale_Officer'))
+        employee.save()
+
+        return redirect('manage_employee')
+
+    return render(request, template_name='Add/add_employee.html', context=context)

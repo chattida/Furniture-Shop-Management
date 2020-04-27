@@ -1,14 +1,12 @@
 {% extends "base.html" %} {% block content %}
-<div class="row bg-orange">
-
-</div>
+<div class="row bg-orange"></div>
 <div class="row">
-  <div class="col-3 bg-orange">
-
-  </div>
+  <div class="col-3 bg-orange"></div>
   <div class="col-6 bg-dark">
-    <h5 class="mt-4 text-white text-center"><i class="text-white fas fa-user-plus"></i> เพิ่มพนักงานใหม่</h5>
-    <form action="{% url 'register' %}" method="POST">
+    <h5 class="mt-4 text-white text-center">
+      <i class="text-white fas fa-user-plus"></i> เพิ่มพนักงานใหม่
+    </h5>
+    <form action="{% url 'add_employee' %}" method="POST">
       {% csrf_token %}
       <div class="form-group text-white col-8 mx-auto mt-3">
         <label for="fname">ชื่อจริง:</label>
@@ -20,7 +18,7 @@
           required
         />
       </div>
-    
+
       <div class="form-group text-white col-8 mx-auto">
         <label for="lname">นามสกุล:</label>
         <input
@@ -31,7 +29,7 @@
           required
         />
       </div>
-    
+
       <div class="form-group text-white col-8 mx-auto">
         <label for="email">อีเมล์:</label>
         <input
@@ -42,7 +40,7 @@
           required
         />
       </div>
-    
+
       <div class="form-group text-white col-8 mx-auto">
         <label for="username">ชื่อผู้ใช้:</label>
         <input
@@ -53,7 +51,7 @@
           required
         />
       </div>
-    
+
       <div class="form-group text-white col-8 mx-auto">
         <label for="password">รหัสผ่าน:</label>
         <input
@@ -64,7 +62,7 @@
           required
         />
       </div>
-    
+
       <div class="form-group text-white col-8 mx-auto">
         <label for="password2">ยืนยันรหัสผ่าน:</label>
         <input
@@ -75,7 +73,7 @@
           required
         />
       </div>
-    
+
       <div class="form-group text-white col-8 mx-auto">
         <label for="phone">เบอร์มือถือ:</label>
         <input
@@ -86,10 +84,17 @@
           required
         />
       </div>
-    
+
       <div class="form-group text-white col-8 mx-auto">
         <label for="type">ฝ่าย:</label>
-        <input type="radio" id="po" name="type" value="po" class="ml-2" checked />
+        <input
+          type="radio"
+          id="po"
+          name="type"
+          value="po"
+          class="ml-2"
+          checked
+        />
         <label for="po">ฝ่ายจัดซื้อ</label>
         <input type="radio" id="so" name="type" value="so" class="ml-2" />
         <label for="so">ฝ่ายขาย</label>
@@ -100,17 +105,16 @@
       </div>
       {% endif %}
       <div class="text-center">
-        <input type="submit" value="เพิ่มพนักงานใหม่" class="btn btn-orange my-3" />
+        <input
+          type="submit"
+          value="เพิ่มพนักงานใหม่"
+          class="btn btn-orange my-3"
+        />
       </div>
     </form>
-    
   </div>
-  <div class="col-3 bg-orange">
-    
-  </div>
+  <div class="col-3 bg-orange"></div>
 </div>
-<div class="row bg-orange">
-
-</div>
+<div class="row bg-orange"></div>
 
 {% endblock content %}
