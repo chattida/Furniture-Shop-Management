@@ -30,7 +30,25 @@ class itemSerializer(serializers.ModelSerializer):
                   'item_type', 'purchase_price', 'sale_price', 'supplier_id']
         read_only_fields = ['id']
         depth = 1
+        extra_kwargs = {
+            'name': {"error_messages": {"blank": "* กรุณากรอกชื่อสินค้า"}},
+            'description': {"error_messages": {"blank": "* กรุณากรอกรายละเอียดสินค้า"}},
+            'item_type': {"error_messages": {"blank": "* กรุณากรอกประเภทสินค้า"}},
+            'purchase_price': {"error_messages": {"blank": "* กรุณากรอกราคาซื้อ", 'invalid': "* กรุณากรอกราคาซื้อให้ถูกต้อง"}},
+            'sale_price': {"error_messages": {"blank": "* กรุณากรอกราคาขาย", 'invalid': "* กรุณากรอกราคาขายให้ถูกต้อง"}},
+        }
 
+    def validate_purchase_price(self, value):
+        if value <= 0:
+            raise serializers.ValidationError(
+                "* กรุณากรอกราคาซื้อให้ถูกต้อง")
+        return value
+    
+    def validate_sale_price(self, value):
+        if value <= 0:
+            raise serializers.ValidationError(
+                "* กรุณากรอกราคาขายให้ถูกต้อง")
+        return value
 
 
 class stockSerializer(serializers.ModelSerializer):
@@ -39,6 +57,16 @@ class stockSerializer(serializers.ModelSerializer):
         fields = ['id', 'item_id', 'color', 'amount']
         read_only_fields = ['id']
         depth = 1
+        extra_kwargs = {
+            'color': {"error_messages": {"blank": "* กรุณากรอกสี"}},
+            'amount': {"error_messages": {"blank": "* กรุณากรอกจำนวนสินค้า", 'invalid': "* กรุณากรอกจำนวนให้ถูกต้อง"}},
+        }
+
+    def validate_amount(self, value):
+        if int(value) < 0:
+            raise serializers.ValidationError(
+                "* กรุณากรอกจำนวนสินค้าให้ถูกต้อง")
+        return value
 
 
 class customerSerializer(serializers.ModelSerializer):
