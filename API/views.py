@@ -185,8 +185,16 @@ class api_employee(APIView):
         except:
             sort = False
 
+        # get parameter user_id
+        try:
+            user_id = request.query_params['user_id']
+        except:
+            user_id = False
+
         if id:
             items = Employee.objects.filter(pk=id)
+        elif user_id:
+            items = Employee.objects.filter(account__user__id=user_id)
         elif sort:
             if (sort == "asc"):
                 items = Employee.objects.filter(Q(account__user__first_name__icontains=search_data) |
@@ -386,7 +394,7 @@ class api_account(APIView):
             id = False
 
         if id:
-            items = Account.objects.filter(pk=id)
+            items = Account.objects.filter(user=id)
         else:
             items = Account.objects.all()
         serializer = accountSerializer(items, many=True)
