@@ -1,0 +1,131 @@
+{% extends "base.html" %} {% block content %}
+<h5 class="mt-4"><i class="fas fa-edit"></i> แก้ไขข้อมูลพนักงาน</h5>
+<hr class="my-3 hr-orange" />
+<div class="form-group text-dark col-8 mx-auto mt-3">
+    <label for="username">ชื่อผู้ใช้:</label>
+    <input type="text" id="username" class="form-control mt-0 mb-2" readonly/>
+    <p class="text-error" id="error_username"></p>
+  </div>
+<div class="form-group text-dark col-8 mx-auto mt-3">
+  <label for="fname">ชื่อจริง:</label>
+  <input type="text" id="fname" class="form-control mt-0 mb-2" />
+  <p class="text-error" id="error_fname"></p>
+</div>
+<div class="form-group text-dark col-8 mx-auto mt-3">
+    <label for="fname">นามสกุล:</label>
+    <input type="text" id="lname" class="form-control mt-0 mb-2"/>
+    <p class="text-error" id="error_lname"></p>
+  </div>
+<div class="text-center">
+  <button
+    onclick=""
+    class="btn btn-success"
+    data-toggle="modal"
+    data-target="#modal1"
+  >
+    บันทึกข้อมูล
+  </button>
+  <button class="btn btn-danger" data-toggle="modal" data-target="#modal2">
+    ลบข้อมูล
+  </button>
+</div>
+
+<!-- modal1 -->
+<div class="modal fade" id="modal1" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h5 calss="ml-2">
+          <i class="fas fa-exclamation-triangle"></i> คำเตือน !
+        </h5>
+      </div>
+      <div class="modal-body text-center">
+        <h5>คุณต้องการบันทึกข้อมูลใช่หรือไม่?</h5>
+      </div>
+      <div>
+        <div class="modal-footer mt-3">
+          <button onclick="save()" class="btn btn-success" data-dismiss="modal">
+            บันทึก
+          </button>
+          <button onclick="" class="btn btn-danger" data-dismiss="modal">
+            ยกเลิก
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <!-- modal2 -->
+  <div class="modal fade" id="modal2" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header text-center">
+          <h5 calss="ml-2">
+            <i class="fas fa-exclamation-triangle"></i> คำเตือน !
+          </h5>
+        </div>
+        <div class="modal-body text-center">
+          <h5>คุณต้องการลบข้อมูลใช่หรือไม่?</h5>
+        </div>
+        <div>
+          <div class="modal-footer mt-3">
+            <button onclick="delete_data()" class="btn btn-success" data-dismiss="modal">
+              ลบ
+            </button>
+            <button onclick="" class="btn btn-danger" data-dismiss="modal">
+              ยกเลิก
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <script>
+
+      window.onload = function () {
+        initialize();
+      };
+
+      let user_id = {{ id }};
+      console.log(user_id)
+
+      function initialize() {
+        axios.get("/api/user/", {params:{id: user_id}}).then((response) => {
+          console.log(response.data)
+          document.getElementById('username').value = response.data[0].username
+          document.getElementById('fname').value = response.data[0].first_name
+          document.getElementById('lname').value = response.data[0].last_name
+        });
+      }
+
+      function save() {
+        document.getElementById('error_fname').innerText = ""
+        document.getElementById('error_lname').innerText = ""
+        
+        axios.put("/api/user/", {
+          id: user_id,
+          first_name: document.getElementById('fname').value,
+          last_name: document.getElementById('lname').value,
+        }).then((response) => {
+          window.location.href = "/manage/employee/";
+        }).catch((error) => {
+          if (error.response.data.first_name){
+            document.getElementById('error_fname').innerText = error.response.data.first_name[0]
+          }
+          if (error.response.data.last_name){
+            document.getElementById('error_lname').innerText = error.response.data.last_name[0]
+          }
+        })
+      }
+
+      function delete_data() {
+        axios.delete("/api/customer/", { data: { id: customer_id } }).then((response) => {
+          window.location.href = "/manage/customer/";
+        })
+      }
+    </script>
+    {% endblock content %}
+  </div>
+</div>

@@ -132,6 +132,13 @@ def edit_item(request, id):
 
 
 @login_required
+def edit_employee(request, id):
+    context = {}
+    context['id'] = id
+    return render(request, template_name='Edit/edit_employee.html', context=context)
+
+
+@login_required
 def manage_employee(request):
     context = {'all_employee': []}
     employees = Employee.objects.all()
@@ -301,8 +308,10 @@ def add_employee(request):
         account.save()
 
         employee = Employee(
-            account=Account.objects.get(user_id=User.objects.get(username=username)),
-            owner_id=Owner.objects.get(account_id=Account.objects.get(user_id=request.user.id))
+            account=Account.objects.get(
+                user_id=User.objects.get(username=username)),
+            owner_id=Owner.objects.get(
+                account_id=Account.objects.get(user_id=request.user.id))
         )
 
         if acc_type == 'po':

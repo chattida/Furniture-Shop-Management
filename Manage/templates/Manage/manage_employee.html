@@ -48,7 +48,7 @@
   <table class="table table-bordered">
     <thead class="thead-dark text-center">
       <tr>
-        <th scope="col" style="width: 12%;">
+        <th scope="col" style="width: 15%;">
           <span>รหัสพนักงาน</span>
           <span
             class="float-right text-secondary"
@@ -72,7 +72,7 @@
             ><i class="fas fa-sort"></i
           ></span>
         </th>
-        <th scope="col" style="width: 15%;">
+        <th scope="col" style="width: 10%;">
           <span>เบอร์ติดต่อ</span>
           <span
             class="float-right text-secondary"
@@ -183,7 +183,7 @@
             <td>${emp["department"]}</td>
             <td>
               <a
-                href="edit/${emp["id"]}"
+                href="edit/${emp["account"].user.id}"
                 class="btn btn-warning"
               >
               <i class="fas fa-user-edit"></i> แก้ไขข้อมูล
