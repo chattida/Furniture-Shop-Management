@@ -17,7 +17,6 @@
         placeholder="ค้นหา"
       />
       <select name="" id="dropdown_item" class="form-control ml-3" required>
-        <option value="none">โปรดเลือก</option>
       </select>
     </div>
   </div>
@@ -172,8 +171,7 @@
   function item_list() {
     let dropdown_item = document.getElementById("id_item_id");
     if (total_item != 1)
-      dropdown_item.innerHTML =
-        "<option value='none' selected>โปรดเลือก</option>";
+      dropdown_item.innerHTML = ""
 
     for (let i = 0; i < total_item; i++) {
       if (data[i]) {
@@ -194,7 +192,7 @@
         },
       })
       .then(function (response) {
-        document.getElementById('dropdown_item').innerHTML = `<option value='none'>โปรดเลือก</option><option value='${select_id}' selected>${select_value}</option>`
+        document.getElementById('dropdown_item').innerHTML = `<option value='${select_id}' selected>${select_value}</option>`
         let data = response.data;
               data.forEach((item) => {
                   option = document.createElement('option')
