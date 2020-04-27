@@ -165,24 +165,39 @@
     function save() {
       axios.put("/api/item/", {
         id: item_id,
-        email: document.getElementById('color').value,
-        phone: document.getElementById('amount').value,
-        account_id: user_id
+        name: document.getElementById('item_name').value,
+        description: document.getElementById('description').value,
+        item_type: document.getElementById('item_type').value,
+        purchase_price: document.getElementById('purchase_price').value,
+        sale_price: document.getElementById('sale_price').value,
+        supplier_id: document.getElementById('dropdown_item').value,
       }).then((response) => {
-        window.location.href = "/manage/stock/";
+        window.location.href = "/manage/item/";
       }).catch((error) => {
-        if (error.response.data.color){
-          document.getElementById('error_color').innerText = error.response.data.color[0]
+        if (error.response.data.name){
+          document.getElementById('error_item_name').innerText = error.response.data.color[0]
         }
-        if (error.response.data.amount){
-          document.getElementById('error_amount').innerText = error.response.data.amount[0]
+        if (error.response.data.description){
+          document.getElementById('error_description').innerText = error.response.data.color[0]
+        }
+        if (error.response.data.item_type){
+          document.getElementById('error_item_type').innerText = error.response.data.color[0]
+        }
+        if (error.response.data.purchase_price){
+          document.getElementById('error_purchase_price').innerText = error.response.data.color[0]
+        }
+        if (error.response.data.sale_price){
+          document.getElementById('error_sale_price').innerText = error.response.data.color[0]
+        }
+        if (error.response.data.supplier_id){
+          document.getElementById('error_supplier_id').innerText = error.response.data.amount[0]
         }
       })
     }
 
     function delete_data() {
-      axios.delete("/api/stock/", { data: { id: item_id } }).then((response) => {
-        window.location.href = "/manage/stock/";
+      axios.delete("/api/item/", { data: { id: item_id } }).then((response) => {
+        window.location.href = "/manage/item/";
       })
     }
 
