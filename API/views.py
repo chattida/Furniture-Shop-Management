@@ -11,8 +11,9 @@ from rest_framework.views import APIView
 from Account.models import Employee
 from API.serializers import (customerSerializer, employeeSerializer,
                              itemSerializer, stockSerializer,
-                             supplierSerializer, userSerializer)
-from Manage.models import Customer, Item, Stock, Supplier
+                             supplierSerializer, userSerializer,
+                             accountSerializer)
+from Manage.models import Customer, Item, Stock, Supplier, Account
 from django.contrib.auth.models import User
 
 
@@ -362,3 +363,41 @@ class api_user(APIView):
             items = User.objects.all()
         serializer = userSerializer(items, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def put(self, request):
+        data = json.loads(request.body)
+        instance = User.objects.get(pk=data.get('id'))
+        serializer = userSerializer(
+            data=data, instance=instance, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class api_account(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        # get parameter id
+        try:
+            id = request.query_params['id']
+        except:
+            id = False
+
+        if id:
+            items = Account.objects.filter(pk=id)
+        else:
+            items = Account.objects.all()
+        serializer = accountSerializer(items, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def put(self, request):
+        data = json.loads(request.body)
+        instance = Account.objects.get(pk=data.get('id'))
+        serializer = accountSerializer(
+            data=data, instance=instance, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

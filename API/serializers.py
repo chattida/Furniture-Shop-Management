@@ -1,7 +1,9 @@
-from rest_framework import serializers
-from Manage.models import Supplier, Item, Stock, Customer
-from Account.models import Employee, Account
 from django.contrib.auth.models import User
+from django.core.validators import validate_email
+from rest_framework import serializers
+
+from Account.models import Account, Employee
+from Manage.models import Customer, Item, Stock, Supplier
 
 
 class supplierSerializer(serializers.ModelSerializer):
@@ -96,7 +98,7 @@ class employeeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Employee
         fields = ['id', 'department', 'owner_id', 'account']
-        read_only_fields = ['id']
+        read_only_fields = ['id', 'owner_id', 'account']
         depth = 2
 
 
@@ -104,7 +106,7 @@ class accountSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
         fields = ['id', 'phone', 'user']
-        read_only_fields = ['id']
+        read_only_fields = ['id', 'user']
         extra_kwargs = {
             'phone': {"error_messages": {"blank": "* กรุณากรอกเบอร์มือถือ"}},
         }
@@ -119,5 +121,17 @@ class accountSerializer(serializers.ModelSerializer):
 class userSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'first_name', 'last_name', 'email']
-        read_only_fields = ['id']
+        fields = ['id', 'username', 'first_name', 'last_name']
+        read_only_fields = ['id', 'username']
+
+    def validate_first_name(self, value):
+        if len(value) <= 0:
+            raise serializers.ValidationError(
+                "* กรุณากรอกชื่อจริง")
+        return value
+
+    def validate_last_name(self, value):
+        if len(value) <= 0:
+            raise serializers.ValidationError(
+                "* กรุณากรอกนามสกุล")
+        return value
