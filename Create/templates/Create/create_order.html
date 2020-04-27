@@ -409,6 +409,27 @@
       });
   }
 
+  function removeTotalAll() {
+    let order_table = document.getElementById("order_list");
+    document.getElementById("total_all").remove();
+        let total_price_order = document.createElement("tr");
+        total_price_order.setAttribute("id", "total_all");
+        let total_price = 0;
+        for (let i=1; i<=count; i++) {
+          try {
+            let list_price = document.querySelector(`#item-${i} > td:nth-child(7)`).innerHTML;
+            total_price += parseFloat(list_price)
+          }catch {
+            continue;
+          }
+        }
+        total_price_order.innerHTML = `
+          <th colspan="6" scope="col" style="width: 10%;" class="pl-4">รวมทั้งหมด</th>
+          <th colspan="2" scope="col" style="width: 5%;" class="pr-4 text-right">${total_price.toFixed(2)} บาท</th>
+        `;
+        order_table.append(total_price_order);
+  }
+
   function add_item() {
     let order_table = document.getElementById("order_list");
     if (send_item[0]) {
@@ -428,23 +449,7 @@
           <td><button class="btn btn-danger" onclick="delete_item(${item_data['id']}, ${now})"><i class="fas fa-minus-square"></i></button></td>
           `
         order_table.append(new_item);
-        document.getElementById("total_all").remove();
-        let total_price_order = document.createElement("tr");
-        total_price_order.setAttribute("id", "total_all");
-        let total_price = 0;
-        for (let i=1; i<=count; i++) {
-          try {
-            let list_price = document.querySelector(`#item-${i} > td:nth-child(7)`).innerHTML;
-            total_price += parseInt(list_price)
-          }catch {
-            continue;
-          }
-        }
-        total_price_order.innerHTML = `
-          <th colspan="6" scope="col" style="width: 10%;" class="pl-4">รวมทั้งหมด</th>
-          <th colspan="2" scope="col" style="width: 5%;" class="pr-4 text-right">${total_price} บาท</th>
-        `;
-        order_table.append(total_price_order);
+        removeTotalAll();
 
         //Add Total list price Event
         add_e = document.getElementById(`value-item-${now}`);
@@ -455,23 +460,7 @@
             document.getElementById(`value-item-${now}`).value = item_data['amount'];
           }
           document.querySelector(`#item-${now} > td:nth-child(7)`).innerText = (price*document.getElementById(`value-item-${now}`).value).toFixed(2);
-          document.getElementById("total_all").remove();
-          let total_price_order = document.createElement("tr");
-          total_price_order.setAttribute("id", "total_all");
-          let total_price = 0;
-          for (let i=1; i<=count; i++) {
-            try {
-              let list_price = document.querySelector(`#item-${i} > td:nth-child(7)`).innerHTML;
-              total_price += parseInt(list_price)
-            }catch {
-              continue;
-            }
-          }
-          total_price_order.innerHTML = `
-            <th colspan="6" scope="col" style="width: 10%;" class="pl-4">รวมทั้งหมด</th>
-            <th colspan="2" scope="col" style="width: 5%;" class="pr-4 text-right">${total_price} บาท</th>
-          `;
-          order_table.append(total_price_order);
+          removeTotalAll();
           update_card();
         });
         list_item_select.push(item_data['id']);
@@ -490,24 +479,7 @@
     }
     document.getElementById(`item-${item}`).remove();
     search(document.getElementById("search_box").value);
-    document.getElementById("total_all").remove();
-    let order_table = document.getElementById("order_list");
-    let total_price_order = document.createElement("tr");
-    total_price_order.setAttribute("id", "total_all");
-    let total_price = 0;
-    for (let i=1; i<=count; i++) {
-      try {
-        let list_price = document.querySelector(`#item-${i} > td:nth-child(7)`).innerHTML;
-        total_price += parseInt(list_price)
-      }catch {
-        continue;
-      }
-    }
-    total_price_order.innerHTML = `
-      <th colspan="6" scope="col" style="width: 10%;" class="pl-4">รวมทั้งหมด</th>
-      <th colspan="2" scope="col" style="width: 5%;" class="pr-4 text-right">${total_price} บาท</th>
-    `;
-    order_table.append(total_price_order);
+    removeTotalAll();
     update_card();
   }
 
