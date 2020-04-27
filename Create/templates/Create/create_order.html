@@ -165,6 +165,7 @@
     id: null,
     status: null,
   };
+  let last_event;
 
   window.onload = function () {
     initialize();
@@ -262,7 +263,7 @@
       item_list();
     }
   }
-let last_event;
+
   function sort(event) {
     let search = document.getElementById("search_box").value;
     last_event = event;

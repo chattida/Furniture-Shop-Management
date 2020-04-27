@@ -136,6 +136,7 @@
     id: null,
     status: null,
   };
+  let last_event;
 
   window.onload = function () {
     initialize();
@@ -235,6 +236,7 @@
 
   function sort(event) {
     let search = document.getElementById("search_box").value;
+    last_event = event;
 
     if (event !== sort_status.id) {
       sort_status.id = event;
@@ -271,6 +273,9 @@
       .get("/api/stock/", {
         params: {
           search: value,
+          sort: sort_status.status,
+          data: last_event,
+          search_data: value,
         },
       })
       .then(function (response) {
