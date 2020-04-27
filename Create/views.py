@@ -58,9 +58,11 @@ def send_order(request):
             order_items = Order_Item.objects.create(
                     amount=send_amount,
                     color=stock.color,
-                    price=stock.item_id.sale_price*send_amount,
+                    price=stock.item_id.sale_price,
                     order_id=orders,
-                    item_id=stock.item_id
+                    description=stock.item_id.description,
+                    item_type=stock.item_id.item_type,
+                    name=stock.item_id.name
                 )
             order_items.save()
 
