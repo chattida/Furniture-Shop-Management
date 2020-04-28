@@ -35,8 +35,7 @@ def my_login(request):
         # Fail
         else:
             context['username'] = username
-            context['password'] = password
-            context['error'] = 'บัญชีผู้ใช้ หรือ รหัสผ่านผิด!'
+            context['error'] = '* บัญชีผู้ใช้ หรือ รหัสผ่านผิด!'
 
     # Get url path
     next_url = request.GET.get('next')
@@ -59,16 +58,26 @@ def let_start(request):
         email = request.POST.get('email')
         username = request.POST.get('username')
         password = request.POST.get('password')
+        password2 = request.POST.get('password2')
         phone = request.POST.get('phone')
+        shop_name = request.POST.get('shop_name')
 
         context = {
             'fname': first_name,
             'lname': last_name,
             'email': email,
             'username': username,
-            'password': password,
-            'phone': phone
+            'phone': phone,
+            'shop_name': shop_name
         }
+
+        # Check already used
+        if len(phone) != 10:
+            context['error'] = '* กรุณากรอกเบอร์มือถือให้ถูกต้อง'
+            return render(request, 'Account/start.html', context=context)
+        elif password != password2:
+            context['error'] = '* รหัสผ่านไม่ตรงกัน'
+            return render(request, 'Account/start.html', context=context)
 
         # Add user to DB
         user = User.objects.create_user(
@@ -121,7 +130,7 @@ def let_start(request):
         owner = Owner(
             account=Account.objects.get(
                 user_id=User.objects.get(username=username)),
-            shop_name=request.POST.get('shop_name')
+            shop_name=shop_name
         )
         owner.save()
         user.groups.add(Group.objects.get(name='Owner'))
@@ -155,10 +164,10 @@ def change_password(request):
 
         # Check password matching
         if not check:
-            context['error'] = 'รหัสผ่านเดิมไม่ถูกต้อง!'
+            context['error'] = '* รหัสผ่านเดิมไม่ถูกต้อง!'
             return render(request, template_name='Account/change_password.html', context=context)
         if newpass1 != newpass2:
-            context['error'] = 'รหัสผ่านไม่ตรงกัน!'
+            context['error'] = '* รหัสผ่านไม่ตรงกัน!'
             return render(request, template_name='Account/change_password.html', context=context)
 
         # Set password to DB

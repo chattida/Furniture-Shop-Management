@@ -53,13 +53,16 @@ def add_employee(request):
 
         # Check already used
         if (User.objects.filter(username=username).exists()):
-            context['error'] = 'ชื่อผู้ใช้งานนี้ถูกใช้ไปแล้ว'
+            context['error'] = '* ชื่อผู้ใช้งานนี้ถูกใช้ไปแล้ว'
             return render(request, 'Add/add_employee.html', context=context)
         elif (User.objects.filter(email=email).exists()):
-            context['error'] = 'อีเมลผู้ใช้งานนี้ถูกใช้ไปแล้ว'
+            context['error'] = '* อีเมลผู้ใช้งานนี้ถูกใช้ไปแล้ว'
+            return render(request, 'Add/add_employee.html', context=context)
+        elif len(phone) != 10:
+            context['error'] = '* กรุณากรอกเบอร์มือถือให้ถูกต้อง'
             return render(request, 'Add/add_employee.html', context=context)
         elif password != password2:
-            context['error'] = 'รหัสผ่านไม่ตรงกัน'
+            context['error'] = '* รหัสผ่านไม่ตรงกัน'
             return render(request, 'Add/add_employee.html', context=context)
 
         # Add user to DB
