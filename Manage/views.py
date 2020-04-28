@@ -47,7 +47,6 @@ def add_employee(request):
             'lname': last_name,
             'email': email,
             'username': username,
-            'password': password,
             'phone': phone
         }
 

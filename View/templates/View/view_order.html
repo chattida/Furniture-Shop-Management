@@ -116,7 +116,7 @@
         },
       }).then((response) => {
         document.getElementById("po_no").innerText = response.data[0].id
-        document.getElementById("sale_name").innerText = `${response.data[0].cus_id.account_id.user.first_name} ${response.data[0].cus_id.account_id.user.last_name}`
+        document.getElementById("sale_name").innerText = `${response.data[0].account_id.user.first_name} ${response.data[0].account_id.user.last_name}`
         document.getElementById("create_date").innerText = response.data[0].create_date
         document.getElementById("cus_name").innerText = `${response.data[0].cus_id.fname} ${response.data[0].cus_id.lname}`
         document.getElementById("cus_email").innerText = response.data[0].cus_id.email
