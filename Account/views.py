@@ -8,7 +8,7 @@ from .models import Account, Owner, Employee
 def my_login(request):
     context = {}
 
-    if Owner.objects.all().count() == 0:
+    if Owner.objects.all().count() == 1:
         return redirect('start')
 
     # Check already login
@@ -49,7 +49,7 @@ def my_login(request):
 def let_start(request):
     context = {}
 
-    if Owner.objects.all().count() > 0:
+    if Owner.objects.all().count() > 1:
         return redirect('login')
 
     # Get detail in form
@@ -85,11 +85,25 @@ def let_start(request):
         )
         account.save()
 
+        #Add permission group
         try:
             Group.objects.get(name='Owner')
         except:
             g_o = Group.objects.create(name='Owner')
-            l_o = [Permission.objects.get(name='Can add employee')]
+            l_o = [Permission.objects.get(name='Can add employee'), Permission.objects.get(name='Can change employee'), 
+                    Permission.objects.get(name='Can delete employee'), Permission.objects.get(name='Can view employee'), 
+                    Permission.objects.get(name='Can add customer'), Permission.objects.get(name='Can change customer'), 
+                    Permission.objects.get(name='Can delete customer'), Permission.objects.get(name='Can view customer'), 
+                    Permission.objects.get(name='Can add supplier'), Permission.objects.get(name='Can change supplier'), 
+                    Permission.objects.get(name='Can delete supplier'), Permission.objects.get(name='Can view supplier'), 
+                    Permission.objects.get(name='Can add item'), Permission.objects.get(name='Can change item'), 
+                    Permission.objects.get(name='Can delete item'), Permission.objects.get(name='Can view item'), 
+                    Permission.objects.get(name='Can add stock'), Permission.objects.get(name='Can change stock'), 
+                    Permission.objects.get(name='Can delete stock'), Permission.objects.get(name='Can view stock'), 
+                    Permission.objects.get(name='Can add order'), Permission.objects.get(name='Can change order'), 
+                    Permission.objects.get(name='Can delete order'), Permission.objects.get(name='Can view order'), 
+                    Permission.objects.get(name='Can add order_ item'), Permission.objects.get(name='Can change order_ item'), 
+                    Permission.objects.get(name='Can delete order_ item'), Permission.objects.get(name='Can view order_ item')]
             g_o.permissions.set(l_o)
 
         owner = Owner(

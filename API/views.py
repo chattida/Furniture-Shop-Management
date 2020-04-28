@@ -17,9 +17,6 @@ from Manage.models import Customer, Item, Stock, Supplier, Account, Order, Order
 from django.contrib.auth.models import User
 
 
-# Create your views here.
-
-
 class api_supplier(APIView):
     permission_classes = [IsAuthenticated]
 

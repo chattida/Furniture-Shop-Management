@@ -1,4 +1,4 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from Manage.models import Order, Order_Item, Stock, Item, Customer
@@ -6,11 +6,13 @@ from Account.models import Account
 
 # Create your views here.
 @login_required
+@permission_required('Manage.add_order')
 def create_order(request):
     return render(request, template_name='Create/create_order.html')
 
 
 @login_required
+@permission_required('Manage.add_order')
 def send_order(request):
     if request.method == 'POST':
         cus_id = request.POST.get('cus-id')
@@ -85,6 +87,7 @@ def send_order(request):
     return redirect('index')
 
 @login_required
+@permission_required('Manage.add_order')
 def show_status(request, error_msg):
     context = {
         'error': []
