@@ -17,6 +17,10 @@ urlpatterns = [
          name='api_user'),
     path('account/', views.api_account.as_view(),
          name='api_account'),
-    path('owner/', views.api_order.as_view(),
-         name='api_order')
+    path('order/', views.api_order.as_view(),
+         name='api_order'),
+    path('order_item/', views.api_order_item.as_view(),
+         name='api_order_item'),
+    path('owner/', views.api_owner.as_view(),
+         name='api_owner'),
 ]

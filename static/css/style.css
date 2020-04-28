@@ -75,3 +75,9 @@ body {
 .menu-button a:hover {
   text-decoration: none !important;
 }
+
+@media print {
+  .d-print-none {
+    display: none !important;
+  }
+}

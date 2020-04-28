@@ -1,20 +1,23 @@
 import json
 from builtins import object
 
+from django.contrib.auth.models import Group, User
 from django.db.models import Q
 from django.shortcuts import render
 from rest_framework import status
+from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from Account.models import Employee
-from API.serializers import (customerSerializer, employeeSerializer,
-                             itemSerializer, stockSerializer,
-                             supplierSerializer, userSerializer,
-                             accountSerializer, orderSerializer)
-from Manage.models import Customer, Item, Stock, Supplier, Account, Order, Order_Item
-from django.contrib.auth.models import User, Group
+from Account.models import Employee, Owner
+from API.serializers import (accountSerializer, customerSerializer,
+                             employeeSerializer, itemSerializer,
+                             orderItemSerializer, orderSerializer,
+                             stockSerializer, supplierSerializer,
+                             userSerializer, ownerSerializer)
+from Manage.models import (Account, Customer, Item, Order, Order_Item, Stock,
+                           Supplier)
 
 
 class api_supplier(APIView):
@@ -444,7 +447,7 @@ class api_order(APIView):
             sort = False
 
         if id:
-            items = Order.objects.get(pk=id)
+            items = Order.objects.filter(pk=id)
         elif sort:
             if (sort == "asc"):
                 items = Order.objects.filter(Q(id__icontains=search_data) | Q(total_price__icontains=search_data) | Q(
@@ -458,4 +461,40 @@ class api_order(APIView):
         else:
             items = Order.objects.all().order_by('-id')
         serializer = orderSerializer(items, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class api_order_item(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        # get parameter id
+        try:
+            id = request.query_params['id']
+        except:
+            id = False
+
+        if id:
+            items = Order_Item.objects.filter(order_id__id=id)
+        else:
+            items = Order_Item.objects.all()
+        serializer = orderItemSerializer(items, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class api_owner(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        # get parameter id
+        try:
+            id = request.query_params['id']
+        except:
+            id = False
+
+        if id:
+            items = Owner.objects.filter(pk=id)
+        else:
+            items = Owner.objects.all()
+        serializer = ownerSerializer(items, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

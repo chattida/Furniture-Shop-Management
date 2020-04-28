@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.core.validators import validate_email
 from rest_framework import serializers
 
-from Account.models import Account, Employee
+from Account.models import Account, Employee, Owner
 from Manage.models import Customer, Item, Stock, Supplier, Order, Order_Item
 
 
@@ -121,7 +121,7 @@ class accountSerializer(serializers.ModelSerializer):
 class userSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'first_name', 'last_name']
+        fields = ['id', 'username', 'first_name', 'last_name', 'email']
         read_only_fields = ['id', 'username']
 
     def validate_first_name(self, value):
@@ -142,4 +142,20 @@ class orderSerializer(serializers.ModelSerializer):
         model = Order
         fields = ['id', 'total_price', 'create_date', 'account_id', 'cus_id']
         read_only_fields = ['id']
+        depth = 3
+
+
+class orderItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order_Item
+        fields = ['id', 'name', 'description', 'item_type',
+                  'amount', 'color', 'price', 'order_id']
+        read_only_fields = ['id']
         depth = 1
+
+
+class ownerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Owner
+        fields = ['id', 'shop_name', 'account']
+        read_only_fields = ['id']
