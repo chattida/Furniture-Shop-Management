@@ -33,8 +33,8 @@ def add_customer(request):
         email = request.POST.get('email')
         phone = request.POST.get('phone')
         address = request.POST.get('address')
-        employee_id = request.user.id
-        employee = User.objects.get(pk=employee_id)
+        user_id = request.user.id
+        account = Account.objects.get(user_id=user_id)
         form = addCustomerForm(request.POST)
         if form.is_valid():
             customer = Customer.objects.create(
@@ -43,7 +43,7 @@ def add_customer(request):
                 email=email,
                 phone=phone,
                 address=address,
-                account_id=employee
+                account_id=account
             )
             return redirect('manage_customer')
         else:
@@ -81,8 +81,8 @@ def add_supplier(request):
         email = request.POST.get('email')
         phone = request.POST.get('phone')
         address = request.POST.get('address')
-        employee_id = request.user.id
-        employee = User.objects.get(pk=employee_id)
+        user_id = request.user.id
+        account = Account.objects.get(user_id=user_id)
         form = addSupplierForm(request.POST)
         if form.is_valid():
             supplier = Supplier.objects.create(
@@ -90,7 +90,7 @@ def add_supplier(request):
                 email=email,
                 phone=phone,
                 address=address,
-                account_id=employee
+                account_id=account
             )
             return redirect('manage_supplier')
         else:
@@ -132,6 +132,7 @@ def edit_item(request, id):
 
 
 @login_required
+@permission_required('Account.add_employee')
 def edit_employee(request, id):
     context = {}
     context['id'] = id
@@ -139,6 +140,7 @@ def edit_employee(request, id):
 
 
 @login_required
+@permission_required('Account.add_employee')
 def manage_employee(request):
     context = {'all_employee': []}
     employees = Employee.objects.all()
