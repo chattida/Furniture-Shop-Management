@@ -100,6 +100,24 @@ class addItemForm(forms.ModelForm):
             }
         }
 
+    def clean_purchase_price(self):
+        data = self.cleaned_data.get('purchase_price')
+        if data <= 0:
+            raise ValidationError(
+                'กรุณากรอกราคาซื้อให้ถูกต้อง',
+                code='invalid'
+            )
+        return data
+
+    def clean_sale_price(self):
+        data = self.cleaned_data.get('sale_price')
+        if data <= 0:
+            raise ValidationError(
+                'กรุณากรอกราคาขายให้ถูกต้อง',
+                code='invalid'
+            )
+        return data
+
 
 class addStockForm(forms.ModelForm):
     class Meta:
@@ -120,3 +138,12 @@ class addStockForm(forms.ModelForm):
                 'invalid_choice': ("โปรดเลือกชื่อสินค้า")
             }
         }
+
+    def clean_amount(self):
+        data = self.cleaned_data.get('amount')
+        if data < 0:
+            raise ValidationError(
+                'กรุณากรอกจำนวนสินค้าให้ถูกต้อง',
+                code='invalid'
+            )
+        return data
