@@ -7,7 +7,7 @@ from Manage.forms import addCustomerForm, addSupplierForm, addItemForm, addStock
 
 #Employee View
 @login_required
-@permission_required('Account.view_employee')
+@permission_required('Account.change_employee')
 def manage_employee(request):
     context = {'all_employee': []}
     employees = Employee.objects.all()
@@ -138,7 +138,7 @@ def edit_employee(request, id):
 
 #Customer View
 @login_required
-@permission_required('Manage.view_customer')
+@permission_required('Manage.change_customer')
 def manage_customer(request):
     context = {'all_customer': []}
     customers = Customer.objects.all()
@@ -199,7 +199,7 @@ def edit_customer(request, id):
 
 #Supplier View
 @login_required
-@permission_required('Manage.view_supplier')
+@permission_required('Manage.change_supplier')
 def manage_supplier(request):
     context = {'all_supplier': []}
     suppliers = Supplier.objects.all()
@@ -257,7 +257,7 @@ def edit_supplier(request, id):
 
 #Item View
 @login_required
-@permission_required('Manage.view_item')
+@permission_required('Manage.change_item')
 def manage_item(request):
     context = {'all_item': []}
     items = Item.objects.all()
@@ -322,7 +322,7 @@ def edit_item(request, id):
 
 #Stock View
 @login_required
-@permission_required('Manage.view_stock')
+@permission_required('Manage.change_stock')
 def manage_stock(request):
     context = {'all_stock': []}
     stocks = Stock.objects.all()
