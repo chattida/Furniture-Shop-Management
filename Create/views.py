@@ -80,9 +80,12 @@ def send_order(request):
                 'total_price': total_price_now,
                 'list_item': list_item,
                 'items_value': items_value,
-                'cus_id': cus_id
+                'cus_id': cus_id,
+                'order_id': orders.id
             }
             return show_status(request, send_status)
+        else:
+            return redirect('view_order', orders.id)
 
     return redirect('index')
 
@@ -90,10 +93,13 @@ def send_order(request):
 @permission_required('Manage.add_order')
 def show_status(request, error_msg):
     context = {
-        'error': []
+        'error': [],
+        'order_id': error_msg['order_id']
     }
+
     for i in range(len(error_msg['fail_add'])):
         if error_msg['fail_add'][i] != 0:
             txt_error = 'รายการ ' + Stock.objects.get(pk=error_msg['list_item'][i]).item_id.name + ' สามารถสั่งได้เพียง ' + str(error_msg['complete_add'][i]) + ' ชิ้น เนื่องจากรายการสินค้านี้มีจำนวนไม่พอ'
             context['error'].append(txt_error)
+
     return render(request, template_name='Create/show_status.html', context=context)
