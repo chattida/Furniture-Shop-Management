@@ -161,7 +161,8 @@
         for (item in customer) {
           if (item !== "account_id") {
             let td = document.createElement("td");
-            if (item == "fname") td.innerText = customer['fname'] + ' ' + customer['lname'];
+            if (item == "fname")
+              td.innerText = customer["fname"] + " " + customer["lname"];
             else if (item == "lname") continue;
             else td.innerText = customer[item];
             head.append(td);
@@ -170,12 +171,12 @@
         td_manage = document.createElement("td");
         td_manage.innerHTML = `<td>
           <a
-            href="edit/${customer['id']}"
+            href="edit/${customer["id"]}"
             class="btn btn-warning"
           >
             <i class="fas fa-user-edit"></i> แก้ไขข้อมูล
           </a>
-        </td>`
+        </td>`;
         head.append(td_manage);
         table.append(head);
       }
