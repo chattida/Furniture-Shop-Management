@@ -75,6 +75,9 @@ def let_start(request):
         if len(phone) != 10:
             context['error'] = '* กรุณากรอกเบอร์มือถือให้ถูกต้อง'
             return render(request, 'Account/start.html', context=context)
+        elif '@' not in email or '.' not in email:
+            context['error'] = '* กรุณากรอกอีเมลให้ถูกต้อง'
+            return render(request, 'Account/start.html', context=context)
         elif password != password2:
             context['error'] = '* รหัสผ่านไม่ตรงกัน'
             return render(request, 'Account/start.html', context=context)

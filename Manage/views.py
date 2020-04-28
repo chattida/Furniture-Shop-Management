@@ -57,6 +57,9 @@ def add_employee(request):
         elif (User.objects.filter(email=email).exists()):
             context['error'] = '* อีเมลผู้ใช้งานนี้ถูกใช้ไปแล้ว'
             return render(request, 'Add/add_employee.html', context=context)
+        elif '@' not in email or '.' not in email:
+            context['error'] = '* กรุณากรอกอีเมลให้ถูกต้อง'
+            return render(request, 'Add/add_employee.html', context=context)
         elif len(phone) != 10:
             context['error'] = '* กรุณากรอกเบอร์มือถือให้ถูกต้อง'
             return render(request, 'Add/add_employee.html', context=context)
