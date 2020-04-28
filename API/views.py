@@ -223,7 +223,9 @@ class api_employee(APIView):
     def delete(self, request):
         data = json.loads(request.body)
         employee = Employee.objects.get(pk=data.get('id'))
-        employee.delete()
+        account = Account.objects.get(pk=employee.account_id)
+        user = User.objects.get(pk=account.user_id)
+        user.delete()
         return Response(status=status.HTTP_200_OK)
 
 

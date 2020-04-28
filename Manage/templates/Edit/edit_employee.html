@@ -207,9 +207,13 @@
   }
 
   function delete_data() {
-    // axios.delete("/api/customer/", { data: { id: customer_id } }).then((response) => {
-    //   window.location.href = "/manage/customer/";
-    // })
+    axios.delete("/api/employee/", {
+      data: {
+        id: employee_id
+      }
+      }).then((response) => {
+      window.location.href = "/manage/employee/";
+    })
   }
 </script>
 {% endblock content %}
