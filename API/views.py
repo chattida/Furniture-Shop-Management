@@ -14,7 +14,7 @@ from API.serializers import (customerSerializer, employeeSerializer,
                              supplierSerializer, userSerializer,
                              accountSerializer, orderSerializer)
 from Manage.models import Customer, Item, Stock, Supplier, Account, Order, Order_Item
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 
 
 class api_supplier(APIView):
@@ -216,6 +216,15 @@ class api_employee(APIView):
         serializer = employeeSerializer(
             data=data, instance=instance, partial=True)
         if serializer.is_valid():
+            employee = Employee.objects.get(pk=data.get('id'))
+            account = Account.objects.get(pk=employee.account_id)
+            user = User.objects.get(pk=account.user_id)
+            if data.get('department') == 'PURCHASING_OFFICER':
+                user.groups.clear()
+                user.groups.add(Group.objects.get(name='Purchasing_Officer'))
+            elif data.get('department') == 'SALE_OFFICER':
+                user.groups.clear()
+                user.groups.add(Group.objects.get(name='Sale_Officer'))
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
