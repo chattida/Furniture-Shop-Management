@@ -8,7 +8,7 @@ from .models import Account, Owner, Employee
 def my_login(request):
     context = {}
 
-    if Owner.objects.all().count() == 1:
+    if Owner.objects.all().count() == 0:
         return redirect('start')
 
     # Check already login
@@ -49,7 +49,7 @@ def my_login(request):
 def let_start(request):
     context = {}
 
-    if Owner.objects.all().count() > 1:
+    if Owner.objects.all().count() > 0:
         return redirect('login')
 
     # Get detail in form
