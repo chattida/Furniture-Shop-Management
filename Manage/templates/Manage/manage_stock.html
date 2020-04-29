@@ -49,26 +49,32 @@
     <thead class="thead-dark text-center">
       <tr>
         <th scope="col" style="width: 10%;">
-          <span>รหัสสินค้า</span>
+          <span>รหัสสต็อก</span>
           <span class="float-right text-secondary" onclick="sort('id')"
             ><i class="fas fa-sort"></i
           ></span>
         </th>
         <th scope="col" style="width: 15%;">
           <span>ชื่อ</span>
-          <span class="float-right text-secondary" onclick="sort('item_id__name')"
+          <span
+            class="float-right text-secondary"
+            onclick="sort('item_id__name')"
             ><i class="fas fa-sort"></i
           ></span>
         </th>
         <th scope="col" style="width: 25%;">
           <span>รายละเอียด</span>
-          <span class="float-right text-secondary" onclick="sort('item_id__description')"
+          <span
+            class="float-right text-secondary"
+            onclick="sort('item_id__description')"
             ><i class="fas fa-sort"></i
           ></span>
         </th>
         <th scope="col" style="width: 10%;">
           <span>ประเภท</span>
-          <span class="float-right text-secondary" onclick="sort('item_id__item_type')"
+          <span
+            class="float-right text-secondary"
+            onclick="sort('item_id__item_type')"
             ><i class="fas fa-sort"></i
           ></span>
         </th>
@@ -86,14 +92,15 @@
         </th>
         <th scope="col" style="width: 10%;">
           <span>ราคา</span>
-          <span class="float-right text-secondary" onclick="sort('item_id__sale_price')"
+          <span
+            class="float-right text-secondary"
+            onclick="sort('item_id__sale_price')"
             ><i class="fas fa-sort"></i
           ></span>
         </th>
         <th scope="col" style="width: 10%;">
           <span>จัดการ</span>
-          <span class="float-right text-secondary"
-            ></span>
+          <span class="float-right text-secondary"></span>
         </th>
       </tr>
     </thead>
@@ -153,7 +160,7 @@
       data = response.data;
       total_item = data.length;
 
-      let table = document.getElementById("data_list");
+      // let table = document.getElementById("data_list");
 
       item_list();
     });
@@ -172,16 +179,16 @@
         let stock = data[i];
         let head = document.createElement("tr");
         head.innerHTML = `
-            <td>${stock['id']}</td>
-            <td>${stock['item_id'].name}</td>
-            <td>${stock['item_id'].description}</td>
-            <td>${stock['item_id'].item_type}</td>
-            <td>${stock['color']}</td>
-            <td>${stock['amount']}</td>
-            <td>${stock['item_id'].sale_price}</td>
+            <td>${stock["id"]}</td>
+            <td>${stock["item_id"].name}</td>
+            <td>${stock["item_id"].description}</td>
+            <td>${stock["item_id"].item_type}</td>
+            <td>${stock["color"]}</td>
+            <td>${stock["amount"]}</td>
+            <td>${stock["item_id"].sale_price}</td>
             <td>
               <a
-                href="edit/${stock['id']}"
+                href="edit/${stock["id"]}"
                 class="btn btn-warning"
               >
               <i class="fas fa-user-edit"></i> แก้ไขข้อมูล
